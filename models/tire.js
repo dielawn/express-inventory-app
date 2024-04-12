@@ -9,7 +9,7 @@ const TireSchema = new Schema({
     info: {type: String, required: true},
     sku: {type: String, required: true},
     category: {type: Schema.ObjectId, ref: 'Category', required: true},
-    stock: {type: Number, required: true},
+    stock: {type: Number, required: true, default: 0}, //tire instances.length not 
     cost_price: {type: Number, required: true},
     list_price: {type: Number, required: true},    
 });

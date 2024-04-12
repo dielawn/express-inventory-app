@@ -1,0 +1,50 @@
+extends layout
+
+block content
+  h1= title 
+
+  form(method='POST')
+    div.form-group
+      label(for='manufacturer') Manufacturer:
+        select#manufacturer.form-control(name='manufacturer' required)
+          option(value='') --Please select an manufacturer--
+          for manufacturer in manufacturers
+            if tire
+              if manufacturer._id.toString()===tire.manufacturer._id.toString()
+                option(value=manufacturer._id selected) #{manufacturer.name}
+              else
+                option(value=manufacturer._id) #{manufacturer.name}
+            else
+                option(value=manufacturer._id) #{manufacturer.name}
+    div.form-group
+      label(for='model_name') Model:
+      input#model_name.form-control(type='text', placeholder='Model of tire' name='model_name' required value=(undefined===tire ? '' : tire.model_name) )
+     div.form-group
+      label(for='size') Size:
+      textarea#size.form-control(placeholder='Size' name='size' required)= undefined===tire ? '' : tire.size
+    div.form-group
+      label(for='info') Info:
+      textarea#info.form-control(placeholder='Info' name='info' required)= undefined===tire ? '' : tire.info
+    div.form-group
+      label(for='sku') SKU:
+      input#sku.form-control(type='text', placeholder='sku13' name='sku' value=(undefined===tire ? '' : tire.sku) required)
+    div.form-group
+      label Category:
+      div
+        for category in categories
+          div(style='display: inline; padding-right:10px;')
+            if category.checked
+              input.checkbox-input(type='checkbox', name='category', id=category._id, value=category._id, checked)
+            else
+              input.checkbox-input(type='checkbox', name='category', id=category._id, value=category._id)
+            label(for=category._id) &nbsp;#{category.name}
+    div.form-group 
+      label Cost Price 
+      input#stock.form-control(type='number')
+    button.btn.btn-primary(type='submit') Submit
+
+  if errors
+    ul
+      for error in errors
+        li!= error.msg
+

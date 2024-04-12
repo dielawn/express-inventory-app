@@ -2,7 +2,11 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const CategorySchema = new Schema({
-    load_speed_rating: {type: String, required: true},
+    load_speed_rating: {
+        type: String, 
+        required: true,
+        enum: ['LT', 'P', 'C', 'D', 'Z', 'T']
+    },
     discription: {type: String, required: true},
 });
 
