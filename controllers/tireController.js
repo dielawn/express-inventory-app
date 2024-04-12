@@ -1,0 +1,1 @@
+const Tire = require('../models/tire.js');
