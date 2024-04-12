@@ -10,7 +10,8 @@ const TireSchema = new Schema({
     sku: {type: String, required: true},
     category: {type: Schema.ObjectId, ref: 'Category', required: true},
     stock: {type: Number, required: true},
-    price: {type: Number, required: true},
+    cost_price: {type: Number, required: true},
+    list_price: {type: Number, required: true},    
 });
 
 TireSchema.virtual('url').get(function () {
