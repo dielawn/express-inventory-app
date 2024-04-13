@@ -117,9 +117,39 @@ exports.tire_instance_post = [
 ];
     
 //display TireInstance delete form on GET
+exports.tire_instance_delete_get = asyncHandler(async (req, res, next) => {
+
+   const tireInstance = await TireInstance.findById(req.params.id)
+    .populate({ path: 'tire', populate: { path: 'manufacturer category' }})
+    .exec();   
+
+    if (!tireInstance) {
+        const error = encodeURIComponent('Invalid instance cannot delete what was not found.')
+        return res.redirect(`/catalog/tireinstances?error=${error}`);
+    }
+
+    res.render('tire_instance_delete', {
+        title: `Delete Tire Instance`,
+        tireInstance: tireInstance,
+    });
+});
 
 //handle TireInstance delete on POST
-    //--tire.stock
+exports.tire_instance_delete_post = asyncHandler(async (req, res, next) => {
+    const tireInstance = await TireInstance.findById(req.params.id);
+   
+    if(!tireInstance) {
+        const error = encodeURIComponent('No such tire instance found.')
+        return res.redirect(`/catalog/tireinstances?error=${error}`);
+    }
+
+    //decrement stock
+    await Tire.findByIdAndUpdate(tireInstance.tire, { $inc: { stock: -1 }})  
+    //delete instance
+    await TireInstance.findByIdAndDelete(req.params.id)    
+    res.redirect('/catalog/tireinstances');
+});
+    
 //display TireInstance update form on GET
 
 //handle TireInstance update on POST
