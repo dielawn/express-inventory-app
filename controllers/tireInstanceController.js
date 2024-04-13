@@ -151,5 +151,72 @@ exports.tire_instance_delete_post = asyncHandler(async (req, res, next) => {
 });
     
 //display TireInstance update form on GET
+exports.tire_instance_update_get = asyncHandler(async (req, res, next) => {
+    //get tire
+    const tireInstance = await TireInstance.findById(req.params.id)
+            .populate({ path: 'tire', populate: { path: 'manufacturer category' }})
+            .exec()
 
+    if (!tireInstance) {
+        const error = encodeURIComponent('No such tire instance found.')
+        return res.redirect(`/catalog/tireinstances?error=${error}`)
+    }
+
+    res.render('tire_instance_form', {
+        title: 'Update Tire Instance',
+        tireInstance: tireInstance,
+    })
+})
 //handle TireInstance update on POST
+exports.tire_instance_update_post = [
+    body('tire', 'Tire must not be empty.')
+        .trim()
+        .isLength({ min: 1 })
+        .escape(),
+    body('dot')
+        .trim()
+        .isLength({ min: 8, max: 13 })
+        .matches(/^[0-9A-Za-z]+$/) //alphanumeric characters
+        .escape(),
+    body('date_code')
+        .trim()
+        .isLength({ min: 4, max: 4 })
+        .matches(/^\d+$/) //numbers only
+        .escape(),
+
+    asyncHandler(async (req, res, next) => {
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            //yes errors
+            const tireInstance = await TireInstance.findById(req.params.id)
+                .populate({ path: 'tire', populate: { path: 'manufacturer category' }})
+                .exec();
+
+                res.render('tire_instance_form', {
+                    title: 'Update Tire Instance',
+                    tireInstance: tireInstance,
+                    error: errors.array(),
+                });
+        } else {
+            //data is valid
+           try {
+            const updatedTireInstance = await TireInstance.findByIdAndUpdate(req.params.id, {
+                tire: req.body.tire,
+                dot: req.body.dot,
+                date_code: req.body.date_code,
+            }, { new: true });
+                res.redirect(updatedTireInstance.url);
+           } catch (dbError) {
+            
+                res.render('tire_instance_form', {
+                    title: 'Update Tire Instance',
+                    tireInstance: await TireInstance.findById(req.params.id)
+                    .populate({ path: 'tire', populate: { path: 'manufacturer category' }}),
+                    error: `Failed to Update tire instance due to database error: ${dbError}`,
+            });
+           }
+        }
+
+    }),
+];
