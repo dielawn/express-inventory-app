@@ -7,7 +7,7 @@ const { body, validationResult } = require("express-validator");
 const asyncHandler = require('express-async-handler');
 
 
-//display list of all tires
+//display list of all tire models
 exports.tire_list = asyncHandler(async (req,res, next) => {
     const allTires = await Tire.find().sort({ model_name: 1 }).exec();
     res.render('tire_list', {
