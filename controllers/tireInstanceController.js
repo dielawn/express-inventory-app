@@ -26,9 +26,8 @@ exports.tire_instance_detail = asyncHandler(async (req, res, next) => {
         .populate({ path: 'tire', populate: { path: 'manufacturer category' }});
 
     if (tireInstance === null) {
-        const error = new Error(`Tire instance with ID: ${req.params.id} not found.`);
-        error.status = 404
-        return next(error);
+        const error = encodeURIComponent(`Tire instance with ID: ${req.params.id} not found.`);
+        return res.redirect(`/catalog/tireinstance?error=${error}`)
     }                  
 
     res.render('tire_instance_detail', {
@@ -38,31 +37,29 @@ exports.tire_instance_detail = asyncHandler(async (req, res, next) => {
 });
 
 //display create new TireInstance form on GET
-exports.tire_instance_get = asyncHandler(async (req, res, next) => {
+exports.tire_instance_create_get = asyncHandler(async (req, res, next) => {
 
    try {
     const allTires = await Tire.find().sort({ model_name: 1}).exec();
-
+    //no tires to create instance of
     if (!allTires.length) {
-        return res.render('tire_instance_form', {
-            title: 'Create Tire Instance',
-            tire_list: allTires,
-            error: `No tires available, create tire before creating instance`
-        });
+        const error = encodeURIComponent(`No tires available, create tire before creating instance`);
+        res.redirect(`/catalog/tires?error=${error}`);
     }  
-
+    //display form
     res.render('tire_instance_form', {
         title: 'Create Tire Instance',
         tire_list: allTires,
     });
-
-   } catch (error) {
-    return next(error)
+    //database error redirect to tire list
+   } catch (dbError) {
+        const error = encodeURIComponent(`Database GET error: ${dbError.message}`);
+        res.redirect(`/catalog/tires?error=${error}`);
    }
 });
     
 //handle TireInstance create on POST
-exports.tire_instance_post = [
+exports.tire_instance_create_post = [
     body('tire', 'Tire must not be empty.')
         .trim()
         .isLength({ min: 1 })
@@ -80,12 +77,7 @@ exports.tire_instance_post = [
 
     asyncHandler(async (req, res, next) => {
         const errors = validationResult(req);
-        //create tire instance obj from val/san data
-        const tireInstance = new TireInstance({
-            tire: req.body.tire,
-            dot: req.body.dot,
-            date_code: req.body.date_code,
-        });
+      
 
         if (!errors.isEmpty()) {
             //yes errors
@@ -93,22 +85,28 @@ exports.tire_instance_post = [
                 res.render('tire_instance_form', {
                     title: 'Create Tire Instance',
                     tire_list: allTires,
-                    tireInstance: tireInstance,
+                    tireInstance: req.body, //pass submitted data back to form
                     error: errors.array(),
                 });
         } else {
-           try {
-             //no errors
-             await tireInstance.save()
+            //create tire instance obj from val/san data
+            const tireInstance = new TireInstance({
+                tire: req.body.tire,
+                dot: req.body.dot,
+                date_code: req.body.date_code,
+            });
+            try {
+            //no errors create instance
+            await tireInstance.save()
             //increment tire.stock
             await Tire.findByIdAndUpdate(tireInstance.tire, { $inc: {stock: 1}})  
-             res.redirect(tireInstance.url);
-           } catch (dbError) {
+            res.redirect(tireInstance.url);
+            } catch (dbError) {
             const allTires = await Tire.find().sort({ model_name: 1}).exec();
                 res.render('tire_instance_form', {
                     title: 'Create Tire Instance',
                     tire_list: allTires,
-                    tireInstance: tireInstance,
+                    tireInstance: req.body,
                     error: `Failed to create tire instance due to database error: ${dbError}`,
             });
            }
@@ -139,7 +137,7 @@ exports.tire_instance_delete_post = asyncHandler(async (req, res, next) => {
     const tireInstance = await TireInstance.findById(req.params.id);
    
     if(!tireInstance) {
-        const error = encodeURIComponent('No such tire instance found.')
+        const error = encodeURIComponent('Tire instance not found.')
         return res.redirect(`/catalog/tireinstances?error=${error}`);
     }
 
@@ -158,7 +156,7 @@ exports.tire_instance_update_get = asyncHandler(async (req, res, next) => {
             .exec()
 
     if (!tireInstance) {
-        const error = encodeURIComponent('No such tire instance found.')
+        const error = encodeURIComponent('Tire instance not found.')
         return res.redirect(`/catalog/tireinstances?error=${error}`)
     }
 
@@ -207,8 +205,8 @@ exports.tire_instance_update_post = [
                 date_code: req.body.date_code,
             }, { new: true });
                 res.redirect(updatedTireInstance.url);
-           } catch (dbError) {
-            
+                
+           } catch (dbError) {            
                 res.render('tire_instance_form', {
                     title: 'Update Tire Instance',
                     tireInstance: await TireInstance.findById(req.params.id)

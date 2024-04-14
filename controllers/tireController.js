@@ -133,7 +133,7 @@ exports.tire_delete_get = asyncHandler(async (req,res, next) => {
         TireInstance.find({ tire: req.params.id }).exec(),
     ]);
 
-    if (tire === null) {
+    if (!tire) {
         //nothing to delete
         res.redirect('/catalog/tires')
         return;
@@ -180,9 +180,8 @@ exports.tire_update_get = asyncHandler(async (req, res, next) => {
 
     if (tire === null) {
         //no results
-        const err = new Error(`Book: "${tire.model_name}" not found`);
-        err.status = 404;
-        return next(err);
+        const error = encodeURIComponent(`Book: "${tire.model_name}" not found`);
+        return res.redirect(`/catalog/tires?error=${error}`)
     }
 
     allCategories.forEach((category) => {

@@ -7,7 +7,9 @@ const CategorySchema = new Schema({
         required: true,
         enum: ['LT', 'P', 'C', 'D', 'Z', 'T']
     },
-    discription: {type: String, required: true},
+    season: { type: String, required: true, enum: ['All Season', 'Winter']},
+    type: { type: String, required: true, enum: ['Highway', 'AT', 'Off Road', 'Other'] },
+    description: {type: String, required: false},
 });
 
 CategorySchema.virtual('url').get(function () {
