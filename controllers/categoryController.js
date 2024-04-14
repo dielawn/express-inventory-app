@@ -4,32 +4,41 @@ const asyncHandler = require('express-async-handler');
 
 //display list of all Categorys
 exports.category_list = asyncHandler(async (req, res, next) => {
-    const allCategories = await Category.find().sort({ type: 1 }).exec()
+    try {
+        const allCategories = await Category.find().sort({ type: 1 }).exec()
 
-    res.render('category_list', {
-        title: 'Tire Categories',
-        categories: allCategories,
+        res.render('category_list', {
+            title: 'Tire Categories',
+            categories: allCategories,
     } );
+    } catch (dbError) {
+        const error = encodeURIComponent(`Database error: ${dbError.message}`);
+        res.redirect(`/catalog/categories?error=${error}`);
+    }
 });
 
 //display details page for each Category
 exports.category_detail = asyncHandler(async (req, res, next) => {
-    const category = await Category.findById(req.params.id)
+    try {
+        const category = await Category.findById(req.params.id)
 
-    if (!category) {
-        const error = encodeURIComponent(`Cannot find ID: ${req.params.id}`)
-        return res.redirect(`/catalog/categories?error=${error}`)
+        if (!category) {
+            const error = encodeURIComponent(`Cannot find ID: ${req.params.id}`)
+            return res.redirect(`/catalog/categories?error=${error}`)
+        }
+
+        res.render('category_detail', {
+            title: `Category Details: ${category.type}`,
+            category: category,
+        });
+    } catch (dbError) {
+        const error = encodeURIComponent(`Database error: ${dbError.message}`);
+        res.redirect(`/catalog/categories?error=${error}`);
     }
-
-    res.render('category_detail', {
-        title: `Category Details: ${category.type}`,
-        category: category,
-    });
 });
 
 //display create new Category form on GET
 exports.category_create_get = asyncHandler(async (req, res, next) => {
-
     try {
         const allCategories = await Category.find().sort({ type: 1 }).exec()
 
@@ -38,7 +47,7 @@ exports.category_create_get = asyncHandler(async (req, res, next) => {
             categories: allCategories,
         });
     } catch (dbError) {
-        const error = encodeURIComponent(`Database GET error: ${dbError.message}`);
+        const error = encodeURIComponent(`Database GET create error: ${dbError.message}`);
         res.redirect(`/catalog/categories?error=${error}`);
     }
 });
@@ -78,21 +87,16 @@ exports.category_create_post = [
             try {
                 await newCategory.save()
                 res.redirect(newCategory.url)
-            } catch (dbError) {
-                //open form display error
-                res.render('category_form', {
-                    title: 'Create Category',
-                    category: req.body,
-                    error: `Database error: ${dbError.message}`
-                });
+            } catch (dbError) {              
+                const error = encodeURIComponent(`Database POST create error: ${dbError.message}`)
+                res.redirect(`/catalog/categories?error=${error}`);
             }
         }
     }),
 ];
 
 //display Category delete form on GET
-exports.category_delete_get = asyncHandler(async (req, res, next) => {
-   
+exports.category_delete_get = asyncHandler(async (req, res, next) => {   
     try {
         const category = await Category.findById(req.params.id)
 
@@ -105,14 +109,13 @@ exports.category_delete_get = asyncHandler(async (req, res, next) => {
             category: category,
         })
     } catch (dbError) {
-        const error = encodeURIComponent(`Database GET error: ${dbError}.`)
+        const error = encodeURIComponent(`Database GET error: ${dbError.message}.`)
         res.redirect(`/catalog/categories?error=${error}`)
     }
 });
 
 //handle Category delete on POST
 exports.category_delete_post = asyncHandler(async (req, res, next) => {
-
    try {
     const category = await Category.findById(req.params.id) 
 
@@ -125,8 +128,7 @@ exports.category_delete_post = asyncHandler(async (req, res, next) => {
     res.redirect('/catalog/categories')
 
    } catch (dbError) {
-
-        const error = encodeURIComponent(`Database POST error: ${dbError}`)
+        const error = encodeURIComponent(`Database POST error: ${dbError.message}`)
         res.redirect(`/catalog/categories?error=${error}`);
    }
 });
@@ -146,7 +148,7 @@ exports.category_update_get = asyncHandler(async (req, res, next) => {
             category: category,
         })
     } catch (dbError) {
-        const error = encodeURIComponent(`Database GET Error: ${dbError}.`)
+        const error = encodeURIComponent(`Database GET Error: ${dbError.message}.`)
         return res.redirect(`/catalog/categories?error=${error}`);
     }
 })
@@ -188,7 +190,7 @@ exports.category_update_post = [
                     res.redirect(updatedCategory.url)
 
                 } catch (dbError) {
-                    const error = encodeURIComponent(`Database POST Error: ${dbError}.`)
+                    const error = encodeURIComponent(`Database POST Error: ${dbError.message}.`)
                     return res.redirect(`/catalog/categories?error=${error}`);
                 }
             } 
