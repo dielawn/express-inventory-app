@@ -171,13 +171,18 @@ exports.category_update_post = [
             const errors = validationResult(req);
     
             if (!errors.isEmpty()) {
-                //errors display form
-                const category = await Category.findById(req.params.id);
-                res.render('category_form', {
-                    title: 'Update Category',
-                    category: {...category.toObject(), ...req.body},  //pass the submitted data back to the form
-                    error: errors.array(),
-                });
+                try {
+                    //errors display form
+                    const category = await Category.findById(req.params.id);
+                    res.render('category_form', {
+                        title: 'Update Category',
+                        category: {...category.toObject(), ...req.body},  //pass the submitted data back to the form
+                        error: errors.array(),
+                    });
+                } catch (dbError) {
+                    const error = encodeURIComponent(`Database error during data retrieval: ${dbError.message}`);
+                    return res.redirect(`/catalog/categories?error=${error}`);
+                } 
             } else {
                 try {
                     const updatedCategory = await Category.findByIdAndUpdate(req.params.id, {

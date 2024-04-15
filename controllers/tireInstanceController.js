@@ -6,34 +6,42 @@ const asyncHandler = require('express-async-handler');
 
 //display list of all tire inventory
 exports.tire_instance_list = asyncHandler(async (req, res, next) => {
+    try {
+        const allTireInstances = await TireInstance.find()
+            .populate({ path: 'tire', populate: { path: 'manufacturer category' }})
+            .sort({ dot: -1 })
+            .exec();
 
-    const allTireInstances = await TireInstance.find()
-        .populate({ path: 'tire', populate: { path: 'manufacturer category' }})
-        .sort({ dot: -1 })
-        .exec();
-
-    res.render('tire_instance_list', {
-        title: 'Complete Inventory',
-        tire_instances: allTireInstances
+        res.render('tire_instance_list', {
+            title: 'Complete Inventory',
+            tire_instances: allTireInstances
     });
+    } catch (dbError) {
+        const error = encodeURIComponent(`Database POST Create Error: ${dbError}.`)
+        return res.redirect(`/catalog/tireinstance?error=${error}`);
+    }   
 });
 
 
 //display details page for each TireInstance
 exports.tire_instance_detail = asyncHandler(async (req, res, next) => {
-    
-    const tireInstance = await TireInstance.findById(req.params.id)                            
-        .populate({ path: 'tire', populate: { path: 'manufacturer category' }});
+    try {
+        const tireInstance = await TireInstance.findById(req.params.id)                            
+            .populate({ path: 'tire', populate: { path: 'manufacturer category' }});
 
-    if (tireInstance === null) {
-        const error = encodeURIComponent(`Tire instance with ID: ${req.params.id} not found.`);
-        return res.redirect(`/catalog/tireinstance?error=${error}`)
-    }                  
+        if (tireInstance === null) {
+            const error = encodeURIComponent(`Tire instance with ID: ${req.params.id} not found.`);
+            return res.redirect(`/catalog/tireinstance?error=${error}`)
+        }                  
 
-    res.render('tire_instance_detail', {
-        title:  `Tire: ${tireInstance.tire ? tireInstance.tire.model_name : 'Unknown'}`,
-        tireInstance: tireInstance,        
-    });
+        res.render('tire_instance_detail', {
+            title:  `Tire: ${tireInstance.tire ? tireInstance.tire.model_name : 'Unknown'}`,
+            tireInstance: tireInstance,        
+        });
+    } catch (dbError) {
+        const error = encodeURIComponent(`Database POST Create Error: ${dbError}.`)
+        return res.redirect(`/catalog/tireinstance?error=${error}`);
+    }
 });
 
 //display create new TireInstance form on GET
@@ -116,7 +124,7 @@ exports.tire_instance_create_post = [
     
 //display TireInstance delete form on GET
 exports.tire_instance_delete_get = asyncHandler(async (req, res, next) => {
-
+    try {
    const tireInstance = await TireInstance.findById(req.params.id)
     .populate({ path: 'tire', populate: { path: 'manufacturer category' }})
     .exec();   
@@ -130,6 +138,10 @@ exports.tire_instance_delete_get = asyncHandler(async (req, res, next) => {
         title: `Delete Tire Instance`,
         tireInstance: tireInstance,
     });
+    } catch (dbError) {
+        const error = encodeURIComponent(`Database GET delete Error: ${dbError}.`)
+        return res.redirect(`/catalog/tire?error=${error}`);
+    }
 });
 
 //handle TireInstance delete on POST

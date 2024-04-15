@@ -117,29 +117,33 @@ exports.tire_create_post = [
         });
         
         if (!errors.isEmpty()) {
-           
-            //there are errors      
-            const [manufacturer, categories] = await Promise.all([
-                Manufacturer.find().exec(),
-                Category.find().exec()
-            ]);
+            try {
+                //there are errors      
+                const [manufacturers, categories] = await Promise.all([
+                    Manufacturer.find().exec(),
+                    Category.find().exec()
+                ]);
 
-            res.render('tire_form', {
-                title: 'New Tire Form',
-                manufacturer: manufacturer,
-                category: categories,
-                tire: tire,
-                errors: errors.array(),
-            });
+                res.render('tire_form', {
+                    title: 'New Tire Form',
+                    manufacturer: manufacturers,
+                    category: categories,
+                    tire: tire,
+                    errors: errors.array(),
+                })
+            } catch (dbError) {
+                const error = encodeURIComponent(`Database error during data retrieval: ${dbError.message}`);
+                return res.redirect(`/catalog/tires?error=${error}`);
+            } 
         } else {
-           try {
+            try {
                 //form data is valid
                 await tire.save()
                 res.redirect(tire.url);
-           } catch (dbError) {
-            const error = encodeURIComponent(`Database POST Create Error: ${dbError}.`)
-            return res.redirect(`/catalog/tire?error=${error}`);
-           }
+            } catch (dbError) {
+                const error = encodeURIComponent(`Database POST Create Error: ${dbError}.`)
+                return res.redirect(`/catalog/tire?error=${error}`);
+            }
         }
     }),
 ];
@@ -275,21 +279,25 @@ exports.tire_update_post = [
         const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
+            try {
+                //there are errors      
+                const [tire, manufacturer, categories] = await Promise.all([
+                    Tire.findById(req.params.id).populate('manufacturer').populate('category').exec(), 
+                    Manufacturer.find().exec(),
+                    Category.find().exec()
+                ]);
 
-            //there are errors      
-            const [tire, manufacturer, categories] = await Promise.all([
-                Tire.findById(req.params.id).populate('manufacturer').populate('category').exec(), 
-                Manufacturer.find().exec(),
-                Category.find().exec()
-            ]);
-
-            res.render('tire_form', {
-                title: 'Update Tire',
-                manufacturer: manufacturer,
-                category: categories,
-                tire: {...tire.toObject(), ...req.body}, // Merge persistent tire data with user inputs
-                errors: errors.array(),
-            });
+                res.render('tire_form', {
+                    title: 'Update Tire',
+                    manufacturer: manufacturer,
+                    category: categories,
+                    tire: {...tire.toObject(), ...req.body}, // Merge persistent tire data with user inputs
+                    errors: errors.array(),
+                });
+            } catch (dbError) {
+                const error = encodeURIComponent(`Database error during data retrieval: ${dbError}.`)
+                return res.redirect(`/catalog/tire?error=${error}`);
+            }
         } else {
           
             try {
