@@ -41,7 +41,7 @@ exports.tire_list = asyncHandler(async (req,res, next) => {
         });
     } catch (dbError) {
         const error = encodeURIComponent(`Database read list Error: ${dbError.message}.`)
-        return res.redirect(`/catalog/tire?error=${error}`);
+        return res.redirect(`/catalog/tires?error=${error}`);
     }
 });
 
@@ -60,7 +60,7 @@ exports.tire_detail = asyncHandler(async (req, res, next) => {
     });
     } catch (dbError) {
         const error = encodeURIComponent(`Database read detail Error: ${dbError}.`)
-        return res.redirect(`/catalog/tire?error=${error}`);
+        return res.redirect(`/catalog/tires?error=${error}`);
     }
 });
 
@@ -79,7 +79,7 @@ exports.tire_create_get = asyncHandler(async (req, res, next) => {
         });
     } catch (dbError) {
         const error = encodeURIComponent(`Database GET Create Error: ${dbError}.`)
-        return res.redirect(`/catalog/tire?error=${error}`);
+        return res.redirect(`/catalog/tires?error=${error}`);
     }
 });
 
@@ -166,7 +166,7 @@ exports.tire_create_post = [
                 res.redirect(tire.url);
             } catch (dbError) {
                 const error = encodeURIComponent(`Database POST Create Error: ${dbError}.`)
-                return res.redirect(`/catalog/tire?error=${error}`);
+                return res.redirect(`/catalog/tires?error=${error}`);
             }
         }
     }),
@@ -194,7 +194,7 @@ exports.tire_delete_get = asyncHandler(async (req,res, next) => {
     });
     } catch (dbError) {
         const error = encodeURIComponent(`Database GET Delete Error: ${dbError}.`)
-        return res.redirect(`/catalog/tire?error=${error}`);
+        return res.redirect(`/catalog/tires?error=${error}`);
     }
 });
 
@@ -222,7 +222,7 @@ exports.tire_delete_post = asyncHandler(async (req, res, next) => {
 
     } catch (dbError) {
         const error = encodeURIComponent(`Database POST Delete Error: ${dbError}.`)
-        return res.redirect(`/catalog/tire?error=${error}`);
+        return res.redirect(`/catalog/tires?error=${error}`);
     }
 
 });
@@ -255,7 +255,7 @@ exports.tire_update_get = asyncHandler(async (req, res, next) => {
         });
     } catch (dbError) {
         const error = encodeURIComponent(`Database GET Update Error: ${dbError}.`)
-        return res.redirect(`/catalog/tire?error=${error}`);
+        return res.redirect(`/catalog/tires?error=${error}`);
     }
 });
 
@@ -320,7 +320,7 @@ exports.tire_update_post = [
                 });
             } catch (dbError) {
                 const error = encodeURIComponent(`Database error during data retrieval: ${dbError}.`)
-                return res.redirect(`/catalog/tire?error=${error}`);
+                return res.redirect(`/catalog/tires?error=${error}`);
             }
         } else {
           
@@ -341,7 +341,7 @@ exports.tire_update_post = [
                 res.redirect(updatedTire.url);
             } catch (dbError) {
                 const error = encodeURIComponent(`Database POST Update Error: ${dbError}.`)
-                return res.redirect(`/catalog/tire?error=${error}`);
+                return res.redirect(`/catalog/tires?error=${error}`);
             }
         }
     }),

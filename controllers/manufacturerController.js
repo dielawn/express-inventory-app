@@ -12,7 +12,7 @@ exports.mfr_list = asyncHandler(async (req, res, next) => {
         });
     } catch (dbError) {
         const error = encodeURIComponent(`Database read list Error: ${dbError}.`)
-        return res.redirect(`/catalog/tire?error=${error}`);
+        return res.redirect(`/catalog/manufacturers?error=${error}`);
     }
 });
 
@@ -32,7 +32,7 @@ exports.mfr_detail = asyncHandler(async (req, res, next) => {
         });
     } catch (dbError) {
         const error = encodeURIComponent(`Database read detail Error: ${dbError}.`)
-        return res.redirect(`/catalog/tire?error=${error}`);
+        return res.redirect(`/catalog/manufacturers?error=${error}`);
     }   
 });
 
@@ -44,7 +44,7 @@ exports.mfr_create_get = asyncHandler(async (req, res, next) => {
         })
     } catch (dbError) {
         const error = encodeURIComponent(`Database GET Create Error: ${dbError}.`)
-        return res.redirect(`/catalog/tire?error=${error}`);
+        return res.redirect(`/catalog/manufacturers?error=${error}`);
     }   
 });
 
@@ -112,7 +112,7 @@ exports.mfr_delete_get = asyncHandler(async (req, res, next) => {
         });
     } catch (dbError) {
         const error = encodeURIComponent(`Database GET delete Error: ${dbError.message}.`)
-        return res.redirect(`/catalog/tire?error=${error}`);
+        return res.redirect(`/catalog/manufacturers?error=${error}`);
     }
 });
 //handle Manufacturer delete on POST
@@ -134,7 +134,7 @@ exports.mfr_delete_post = asyncHandler(async (req, res, next) => {
     res.redirect('/catalog/manufacturers');
 } catch (dbError) {
     const error = encodeURIComponent(`Database POST delete Error: ${dbError.message}.`)
-    return res.redirect(`/catalog/tire?error=${error}`);
+    return res.redirect(`/catalog/manufacturers?error=${error}`);
 }
 });
 
@@ -152,7 +152,7 @@ exports.mfr_update_get = asyncHandler(async (req, res, next) => {
         });
     } catch (dbError) {
         const error = encodeURIComponent(`Database GET update Error: ${dbError.message}.`)
-        return res.redirect(`/catalog/tire?error=${error}`);
+        return res.redirect(`/catalog/manufacturers?error=${error}`);
     }
 });
 //handle Manufacturer update on POST

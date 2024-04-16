@@ -18,7 +18,7 @@ exports.tire_instance_list = asyncHandler(async (req, res, next) => {
     });
     } catch (dbError) {
         const error = encodeURIComponent(`Database POST Create Error: ${dbError}.`)
-        return res.redirect(`/catalog/tireinstance?error=${error}`);
+        return res.redirect(`/catalog/tireinstances?error=${error}`);
     }   
 });
 
@@ -31,7 +31,7 @@ exports.tire_instance_detail = asyncHandler(async (req, res, next) => {
 
         if (tireInstance === null) {
             const error = encodeURIComponent(`Tire instance with ID: ${req.params.id} not found.`);
-            return res.redirect(`/catalog/tireinstance?error=${error}`)
+            return res.redirect(`/catalog/tireinstances?error=${error}`)
         }                  
 
         res.render('tire_instance_detail', {
@@ -40,7 +40,7 @@ exports.tire_instance_detail = asyncHandler(async (req, res, next) => {
         });
     } catch (dbError) {
         const error = encodeURIComponent(`Database POST Create Error: ${dbError}.`)
-        return res.redirect(`/catalog/tireinstance?error=${error}`);
+        return res.redirect(`/catalog/tireinstances?error=${error}`);
     }
 });
 
@@ -62,7 +62,7 @@ exports.tire_instance_create_get = asyncHandler(async (req, res, next) => {
     //database error redirect to tire list
    } catch (dbError) {
         const error = encodeURIComponent(`Database GET error: ${dbError.message}`);
-        res.redirect(`/catalog/tires?error=${error}`);
+        res.redirect(`/catalog/tireinstances?error=${error}`);
    }
 });
     
@@ -140,7 +140,7 @@ exports.tire_instance_delete_get = asyncHandler(async (req, res, next) => {
     });
     } catch (dbError) {
         const error = encodeURIComponent(`Database GET delete Error: ${dbError}.`)
-        return res.redirect(`/catalog/tire?error=${error}`);
+        return res.redirect(`/catalog/tireinstances?error=${error}`);
     }
 });
 
