@@ -7,6 +7,30 @@ const { body, validationResult } = require("express-validator");
 const asyncHandler = require('express-async-handler');
 
 
+//display details of tires, tire instances, mfg, and categories
+exports.index = asyncHandler(async (req, res, next) => {
+    const [
+        numTires,
+        numTireInstances,
+        numMfr,
+        numCat,
+    ] = await Promise.all([
+        Tire.countDocuments({}).exec(),
+        TireInstance.countDocuments({}).exec(),
+        Manufacturer.countDocuments({}).exec(),
+        Category.countDocuments({}).exec(),
+    ]);
+
+    res.render('index', {
+        title: 'Tire Inventory',
+        tire_count: numTires,
+        instance_count: numTireInstances,
+        mfr_count: numMfr,
+        category_count: numCat,
+    });
+});
+
+
 //display list of all tire models
 exports.tire_list = asyncHandler(async (req,res, next) => {
     try {
@@ -208,7 +232,7 @@ exports.tire_update_get = asyncHandler(async (req, res, next) => {
 
     try {
         const [tire, allManufacturers, allCategories] = await Promise.all([
-            Tire.findById(req.params.id).populate('manufacturer').populate('catagory').exec(),
+            Tire.findById(req.params.id).populate('manufacturer').populate('category').exec(),
             Manufacturer.find().sort({ company: 1 }).exec(),
             Category.find().sort({ load_speed_rating: 1 }).exec()
         ]);
