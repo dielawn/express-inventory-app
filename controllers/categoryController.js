@@ -39,12 +39,9 @@ exports.category_detail = asyncHandler(async (req, res, next) => {
 
 //display create new Category form on GET
 exports.category_create_get = asyncHandler(async (req, res, next) => {
-    try {
-        const allCategories = await Category.find().sort({ type: 1 }).exec()
-
+    try {        
         res.render('category_form', {
             title: 'Create Category',
-            categories: allCategories,
         });
     } catch (dbError) {
         const error = encodeURIComponent(`Database GET create error: ${dbError.message}`);
