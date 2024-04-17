@@ -1,0 +1,29 @@
+extends layout
+
+block content
+  h1= title 
+
+  form(method='POST')
+    div.form-group
+      label(for='load_speed_rating') Load/Speed rating:
+      input#load_speed_rating.form-control(type='text', placeholder='Load/Speed rating', name='load_speed_rating', value=(category ? category.load_speed_rating : ''))
+
+    div.form-group
+      label(for='season') Season:
+      input#season.form-control(type='text', placeholder='Season', name='season', value=(category ? category.season : ''))
+
+    div.form-group
+      label(for='type') Type or Best use:
+      input#type.form-control(type='text', placeholder='Type', name='type', value=(category ? category.type : ''))
+
+    div.form-group
+      label(for='description') Description:
+      textarea#description.form-control(placeholder='Description', name='description')
+        | #{category ? category.description : ''}
+
+    button.btn.btn-primary(type='submit') Submit
+
+    if errors && errors.length > 0
+      ul
+        each error in errors
+          li!= error.msg

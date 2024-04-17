@@ -5,20 +5,18 @@ block content
 
   form(method='POST')
     div.form-group
-      label(for='manufacturer') Manufacturer:
+      label(for='manufacturer') Manufacturers:
         select#manufacturer.form-control(name='manufacturer' required)
           option(value='') --Please select an manufacturer--
-          for manufacturer in manufacturers
-            if tire
-              if manufacturer._id.toString()===tire.manufacturer._id.toString()
-                option(value=manufacturer._id selected) #{manufacturer.name}
-              else
-                option(value=manufacturer._id) #{manufacturer.name}
-            else
-                option(value=manufacturer._id) #{manufacturer.name}
+          each manufacturer in manufacturers           
+            - const selected = tire && tire.manufacturer && manufacturer._id.toString() === tire.manufacturer._id.toString()
+            if seleected 
+              option(value=manufacturer._id selected)= manufacturer.name 
+            else 
+              option(value=anufacturer._id)= manufacturer.name           
     div.form-group
       label(for='model_name') Model:
-      input#model_name.form-control(type='text', placeholder='Model of tire' name='model_name' required value=(undefined===tire ? '' : tire.model_name) )
+      input#model_name.form-control(type='text', placeholder='Model of tire' name='model_name' required value=(undefined===tire ? '' : tire.model_name))
      div.form-group
       label(for='size') Size:
       textarea#size.form-control(placeholder='Size' name='size' required)= undefined===tire ? '' : tire.size
@@ -40,11 +38,16 @@ block content
             label(for=category._id) &nbsp;#{category.name}
     div.form-group 
       label Cost Price 
-      input#stock.form-control(type='number')
+      input#cost.form-control(type='number', name='cost_price', required)
+    div.form-group 
+      label List Price 
+      input#list.form-control(type='number', name='list_price', required)
+
     button.btn.btn-primary(type='submit') Submit
 
-  if errors
+  if errors && errors.length > 0
     ul
-      for error in errors
+      each error in errors
         li!= error.msg
+
 

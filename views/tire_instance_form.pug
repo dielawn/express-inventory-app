@@ -1,0 +1,29 @@
+extends layout
+
+block content
+  h1= title 
+
+  form(method='POST')
+    div.form-group
+      label(for='tire') Tires:
+      select#tire_instance.form-control(name='tire' required)
+        option(value='') --Please select tire model--
+        each tire in tires 
+          - const selected = tire_instance && tire._id.toString() === tire_instance.tire.toString()
+          if selected
+            option(value=tire._id selected)= tire.model_name
+          else
+            option(value=tire._id)= tire.model_name
+    div.form-group
+      label(for='dot') DOT:
+      input#dot.form-control(type='text', placeholder='DOT', name='dot', required value=(tire_instance ? tire_instance.dot : ''))
+    div.form-group
+      label(for='date_code') Date Code:
+      input#date_code.form-control(type='text', placeholder='Date code', name='date_code', required value=(tire_instance ? tire_instance.date_code : ''))
+
+    button.btn.btn-primary(type='submit') Submit
+
+    if errors && errors.length > 0
+      ul
+        each error in errors
+          li!= error.msg
