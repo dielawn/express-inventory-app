@@ -5,6 +5,7 @@ const tire_controller = require('../controllers/tireController');
 const tire_instance_controller = require('../controllers/tireInstanceController');
 const mfr_controller = require('../controllers/manufacturerController');
 const category_controller = require('../controllers/categoryController');
+const tire_size_controller = require('../models/tire_size');
 
 
 
@@ -103,3 +104,27 @@ router.get('/category/:id/update', category_controller.category_update_post);
 router.get('/category/:id/delete', category_controller.category_delete_get);
 //POST delete
 router.get('/category/:id/delete', category_controller.category_delete_post);
+
+
+
+// SIZE ROUTES //
+
+//GET create
+router.get('/size/create', tire_size_controller.size_create_get);
+//POST create
+router.get('/size/create', category_controller.size_create_post);
+
+//GET read list
+router.get('/sizes', category_controller.size_list);
+//POST read detail
+router.get('/size/:id', category_controller.size_detail);
+
+//GET update
+router.get('/size/:id/update', category_controller.size_update_get);
+//POST update
+router.get('/size/:id/update', category_controller.size_update_post);
+
+//GET delete
+router.get('/size/:id/delete', category_controller.size_delete_get);
+//POST delete
+router.get('/size/:id/delete', category_controller.size_delete_post);

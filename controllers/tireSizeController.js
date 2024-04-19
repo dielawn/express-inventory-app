@@ -1,12 +1,9 @@
 const Tire = require('../models/tire.js');
 const TireInstance = require('../models/tireInstance.js');
-const Manufacturer = require('../models/manufacturer.js');
-const Category = require('../models/category.js');
 const TireSize = require('../models/tire_size.js')
 
 const { body, validationResult } = require("express-validator");
 const asyncHandler = require('express-async-handler');
-
 
 //list
 exports.size_list = asyncHandler(async (req, res, next) => {
@@ -32,7 +29,7 @@ exports.size_detail = asyncHandler(async (req, res, next) => {
             size: instancesOfSize,
         })
     } catch (dbError) {
-        const error = encodeURIComponent(`Database read detail Error: ${dbError}.`)
+        const error = encodeURIComponent(`Database read detail Error: ${dbError.message}.`)
         return res.redirect(`/catalog/sizes?error=${error}`);
     }
 });
@@ -44,7 +41,7 @@ exports.size_create_get = asyncHandler(async (req, res, next) => {
             title: 'Create new size',
         })
     } catch (dbError) {
-        const error = encodeURIComponent(`Database GET Delete Error: ${dbError}.`)
+        const error = encodeURIComponent(`Database GET Delete Error: ${dbError.message}.`)
         return res.redirect(`/catalog/sizes?error=${error}`);
     }
 });
@@ -189,7 +186,7 @@ exports.size_delete_get = asyncHandler(async (req, res, next) => {
             size: size,
         });
     } catch (dbError) {
-        const error = encodeURIComponent(`Databse GET delete error: ${error}`)
+        const error = encodeURIComponent(`Databse GET delete error: ${dbError.message}`)
         return res.redirect(`/catalog/sizes?error=${error}`)
     }
 });
@@ -215,7 +212,7 @@ exports.size_delete_post = asyncHandler(async (req, res, next) => {
         res.redirect('/catalog/sizes')
 
     } catch (dbError) {
-        const error = encodeURIComponent(`Databse POST delete error: ${error}`)
+        const error = encodeURIComponent(`Databse POST delete error: ${dbError.message}`)
         return res.redirect(`/catalog/sizes?error=${error}`)
     }
 });
