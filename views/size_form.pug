@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  h1= title 
+
+  form(method='POST')
+    div.form-group
+      label(for='tire_width') Tire width (mm): 
+      input#tire_width.form-control(type='number', placeholder='width', name='tire_width')
+    div.form-group 
+      label(for='aspect_ratio') Sidewall (% of width):
+      input#aspect_ratio.form-control(type='number', placeholder='sidewall', name='aspect_ratio')
+    div.form-group 
+      label(for='wheel_dia') Wheel diameter (in):
+      input#wheel_dia.form-control(type='number', placeholder='wheel', name='wheel_dia')
+
+    button.btn.btn-primary(type='submit') Submit
+
+  if errors && errors.length > 0
+    ul
+      each error in errors
+        li!= error.msg

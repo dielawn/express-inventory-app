@@ -51,7 +51,7 @@ exports.size_create_post = [
         .trim()
         .isLength({ min: 3, max: 3 })
         .escape(),
-    body('sidewall', 'Sidewall must be a 2 digit number.')
+    body('aspect_ratio', 'Sidewall must be a 2 digit number.')
         .trim()
         .isLength({ min: 2, max: 2})
         .escape(),
@@ -72,7 +72,7 @@ exports.size_create_post = [
             //no errors
             const newSize = new TireSize({
                 tread_width: req.body.tread_width,
-                sidewall: req.body.sidewall,
+                aspect_ratio: req.body.aspect_ratio,
                 wheel_dia: req.body.wheel_dia,
             });
             try  {
@@ -108,7 +108,7 @@ exports.size_update_post = [
         .trim()
         .isLength({ min: 3, max: 3 })
         .escape(),
-    body('sidewall', 'Sidewall must be a 2 digit number.')
+    body('aspect_ratio', 'Sidewall must be a 2 digit number.')
         .trim()
         .isLength({ min: 2, max: 2})
         .escape(),
@@ -140,7 +140,7 @@ exports.size_update_post = [
             try {
                 const updatedSize = await TireSize.findByIdAndUpdate(req.params.id, {
                     tread_width: req.body.tread_width,
-                    sidewall: req.body.sidewall,
+                    aspect_ratio: req.body.aspect_ratio,
                     wheel_dia: req.body.wheel_dia
                 }, { new: true });
                 if (updatedSize) {

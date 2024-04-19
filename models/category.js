@@ -2,13 +2,12 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const CategorySchema = new Schema({
-    load_speed_rating: {
+    tire_class: {
         type: String, 
         required: true,
-        enum: ['LT', 'P', 'C', 'D', 'Z', 'T']
+        enum: ['LT', 'P', 'C', 'D', 'T', 'AT', 'MT', 'HT', 'UHP', 'RFT', 'ST', 'EV', 'Other']
     },
     season: { type: String, required: true, enum: ['All Season', 'Winter']},
-    type: { type: String, required: true, enum: ['Highway', 'AT', 'Off Road', 'Other'] },
     description: {type: String, required: false},
 });
 

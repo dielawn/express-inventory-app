@@ -5,7 +5,7 @@ const asyncHandler = require('express-async-handler');
 //display list of all Categorys
 exports.category_list = asyncHandler(async (req, res, next) => {
     try {
-        const allCategories = await Category.find().sort({ type: 1 }).exec()
+        const allCategories = await Category.find().sort({ tire_class: 1 }).exec()
 
         res.render('category_list', {
             title: 'Tire Categories',
@@ -28,7 +28,7 @@ exports.category_detail = asyncHandler(async (req, res, next) => {
         }
 
         res.render('category_detail', {
-            title: `Category Details: ${category.type}`,
+            title: `Category Details: ${category.tire_class}`,
             category: category,
         });
     } catch (dbError) {
@@ -50,15 +50,11 @@ exports.category_create_get = asyncHandler(async (req, res, next) => {
 });
 //handle Category create on POST
 exports.category_create_post = [
-    body('load_speed_rating', 'Load/Speed rating required.')
+    body('tire_class', 'Class required.')
         .trim()
         .isLength({ min: 1 })
         .escape(),
     body('season', 'Season required')
-        .trim()
-        .isLength({ min: 1 })
-        .escape(),
-    body('type', 'Type required')
         .trim()
         .isLength({ min: 1 })
         .escape(),
@@ -76,9 +72,8 @@ exports.category_create_post = [
         } else {
             //no errors create new category
             const newCategory = new Category({
-                load_speed_rating: req.body.load_speed_rating,
+                tire_class: req.body.tire_class,
                 season: req.body.season,
-                type: req.body.type,
                 description: req.body.description,
             });
             try {
@@ -141,7 +136,7 @@ exports.category_update_get = asyncHandler(async (req, res, next) => {
         }
 
         res.render('category_form', {
-            Title: `Update Category: ${category.load_speed_rating}`,
+            Title: `Update Category: ${category.tire_class}`,
             category: category,
         })
     } catch (dbError) {
@@ -151,15 +146,11 @@ exports.category_update_get = asyncHandler(async (req, res, next) => {
 })
 //handle Category update on POST
 exports.category_update_post = [
-    body('load_speed_rating', 'Load/Speed rating required.')
+    body('tire_class', 'Class required.')
         .trim()
         .isLength({ min: 1 })
         .escape(),
     body('season', 'Season required')
-        .trim()
-        .isLength({ min: 1 })
-        .escape(),
-    body('type', 'Type required')
         .trim()
         .isLength({ min: 1 })
         .escape(),
@@ -183,9 +174,8 @@ exports.category_update_post = [
             } else {
                 try {
                     const updatedCategory = await Category.findByIdAndUpdate(req.params.id, {
-                        load_speed_rating: req.body.load_speed_rating,
+                        tire_class: req.body.tire_class,
                         season: req.body.season,
-                        type: req.body.type,
                         description: req.body.description,
                     }, { new: true });
 
