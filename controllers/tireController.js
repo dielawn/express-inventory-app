@@ -95,10 +95,6 @@ exports.tire_create_post = [
         .trim()
         .isLength({ min: 1 })
         .escape(),
-    body('size', '7 digits Tire Size is required, no "/".')
-        .trim()
-        .isLength({ min: 7, max: 7 })
-        .escape(),
     body('info', 'Tire information must not be empty.')
         .trim()
         .isLength({ min: 1 })
@@ -131,7 +127,6 @@ exports.tire_create_post = [
          const tire = new Tire({           
             manufacturer: req.body.manufacturer,
             model_name: req.body.model_name,
-            size: req.body.size,
             info: req.body.info,
             sku: req.body.sku,
             category: req.body.category,
@@ -270,10 +265,6 @@ exports.tire_update_post = [
         .trim()
         .isLength({ min: 1 })
         .escape(),
-    body('size', '7 digits Tire Size is required, no "/".')
-        .trim()
-        .isLength({ min: 7, max: 7 })
-        .escape(),
     body('info', 'Tire information must not be empty.')
         .trim()
         .isLength({ min: 1 })
@@ -329,7 +320,6 @@ exports.tire_update_post = [
                 const updatedTire = await Tire.findByIdAndUpdate(req.params.id, {
                     manufacturer: req.body.manufacturer,
                     model_name: req.body.model_name,
-                    size: req.body.size,
                     info: req.body.info,
                     sku: req.body.sku,
                     category: req.body.category,

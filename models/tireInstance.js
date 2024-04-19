@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 
 const TireInstanceSchema = new Schema({
     tire: {type: Schema.ObjectId, ref: 'Tire', required: true},
+    size: { type: Schema.ObjectId, ref: 'TireSize', required: true},
     dot: {type: String, required: true},
     date_code: {type: Number, required: true},
 });

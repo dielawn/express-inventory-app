@@ -5,7 +5,6 @@ const Schema = mongoose.Schema;
 const TireSchema = new Schema({
     manufacturer: {type: Schema.ObjectId, ref: 'Manufacturer', required: true},
     model_name: {type: String, required: true},
-    size: {type: String, required: true},
     info: {type: String, required: true},
     sku: {type: String, required: true},
     category: {type: Schema.ObjectId, ref: 'Category', required: true},
