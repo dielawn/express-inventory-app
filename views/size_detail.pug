@@ -1,0 +1,19 @@
+extends layout
+
+block content
+
+  h1 #{title}
+
+  div(style='margin-left:20px;margin-top:20px')
+    h4 #{size.size}
+       
+  hr
+  p
+    a(href=size.url+'/delete') Delete size
+  p
+    a(href=size.url+'/update') Update size
+
+  if errors && errors.length > 0
+    ul
+      each error in errors
+        li!= error.msg

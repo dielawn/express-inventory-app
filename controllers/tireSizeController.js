@@ -8,7 +8,7 @@ const asyncHandler = require('express-async-handler');
 //list
 exports.size_list = asyncHandler(async (req, res, next) => {
     try {
-        const allSizes = await TireSize.find().sort({ size: 1 }).exec()
+        const allSizes = await TireSize.find().sort({ wheel_dia: 1 }).exec()
         res.render('tire_size_list', {
             title: 'All Tire Sizes:',
             size_list: allSizes,
@@ -172,21 +172,22 @@ exports.size_delete_get = asyncHandler(async (req, res, next) => {
         ]);
 
         if (!size) {
-            const error = encodeURIComponent(`Size not found: ${size}`)
+            const error = encodeURIComponent(`Size not found: ${req.params.id}`)
             return res.redirect(`catalog/sizes?error=${error}`)            
         }
         //check for tire instances of size before delete
         if (associatedInstances.length > 0) {
-            const error = encodeURIComponent(`Delete associated tires of ${size} before deleting size`)
+            const error = encodeURIComponent(`Delete associated tires of ${req.params.id} before deleting size`)
             return res.redirect(`/catalog/sizes?error=${error}`)
         }
 
         res.render('size_delete', {
-            title: 'Delete Size',
+            title: `Delete Size: ${size.size}`,
             size: size,
+            ass_tires: associatedInstances,
         });
     } catch (dbError) {
-        const error = encodeURIComponent(`Databse GET delete error: ${dbError.message}`)
+        const error = encodeURIComponent(`Database GET delete error: ${dbError.message}`)
         return res.redirect(`/catalog/sizes?error=${error}`)
     }
 });

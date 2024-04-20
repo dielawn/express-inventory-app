@@ -50,7 +50,7 @@ exports.tire_detail = asyncHandler(async (req, res, next) => {
     try {
         const [tire, tireInstances] = await Promise.all([
             Tire.findById(req.params.id).populate('manufacturer').populate('category').exec(),
-            TireInstance.find().sort({ tire: req.params.id }).exec()
+            TireInstance.find({ tire: req.params.id }).exec()
         ]);
 
         res.render('tire_detail', {

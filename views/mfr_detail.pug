@@ -1,0 +1,30 @@
+extends layout
+
+block content
+  h1 #{title}
+
+  div(style='margin-left:20px; margin-top:20px')
+    if mfr
+      h4 #{mfr.name}  #{mfr.location}
+    else
+      p Manufacturer details not available.
+
+    if mfr_tires && mfr_tires.length
+      h4 Tires by this Manufacturer:
+      ul
+        each tire in mfr_tires
+          li
+            a(href=tire.url) #{tire.tire_name}  
+    else
+      p There are no tires by this manufacturer.
+    
+  hr
+  p
+    a(href=mfr.url+'/delete') Delete manufacturer
+  p
+    a(href=mfr.url+'/update') Update manufacturer
+
+  if errors && errors.length > 0
+    ul
+      each error in errors
+        li!= error.msg

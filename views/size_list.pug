@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  h1= title
+  if size_list && size_list.length
+    ul
+      each size in size_list
+        li
+          a(href=size.url) #{size.size} 
+  else
+    p There are no matching sizes.
+
+  if errors && errors.length > 0
+    ul
+      each error in errors
+        li!= error.msg

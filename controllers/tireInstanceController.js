@@ -9,6 +9,7 @@ exports.tire_instance_list = asyncHandler(async (req, res, next) => {
     try {
         const allTireInstances = await TireInstance.find()
             .populate({ path: 'tire', populate: { path: 'manufacturer category' }})
+            .populate('size') 
             .sort({ dot: -1 })
             .exec();
 
@@ -27,7 +28,8 @@ exports.tire_instance_list = asyncHandler(async (req, res, next) => {
 exports.tire_instance_detail = asyncHandler(async (req, res, next) => {
     try {
         const tireInstance = await TireInstance.findById(req.params.id)                            
-            .populate({ path: 'tire', populate: { path: 'manufacturer category' }});
+            .populate({ path: 'tire', populate: { path: 'manufacturer category' }})
+            .populate('size')
 
         if (tireInstance === null) {
             const error = encodeURIComponent(`Tire instance with ID: ${req.params.id} not found.`);
@@ -35,8 +37,8 @@ exports.tire_instance_detail = asyncHandler(async (req, res, next) => {
         }                  
 
         res.render('tire_instance_detail', {
-            title:  `Tire: ${tireInstance.tire ? tireInstance.tire.model_name : 'Unknown'}`,
-            tireInstance: tireInstance,        
+            title:  `Tire: ${tireInstance.tire ? tireInstance.dot : 'Unknown'}`,
+            tire_instance: tireInstance,        
         });
     } catch (dbError) {
         const error = encodeURIComponent(`Database POST Create Error: ${dbError}.`)
@@ -106,8 +108,6 @@ exports.tire_instance_create_post = [
             try {
             //no errors create instance
             await tireInstance.save()
-            //increment tire.stock
-            await Tire.findByIdAndUpdate(tireInstance.tire, { $inc: {stock: 1}})  
             res.redirect(tireInstance.url);
             } catch (dbError) {
             const allTires = await Tire.find().sort({ model_name: 1}).exec();
@@ -127,6 +127,7 @@ exports.tire_instance_delete_get = asyncHandler(async (req, res, next) => {
     try {
    const tireInstance = await TireInstance.findById(req.params.id)
     .populate({ path: 'tire', populate: { path: 'manufacturer category' }})
+    .populate('size')
     .exec();   
 
     if (!tireInstance) {
@@ -135,7 +136,7 @@ exports.tire_instance_delete_get = asyncHandler(async (req, res, next) => {
     }
 
     res.render('tire_instance_delete', {
-        title: `Delete Tire Instance`,
+        title: `Delete Tire Instance: ${tireInstance.dot}`,
         tireInstance: tireInstance,
     });
     } catch (dbError) {
@@ -153,8 +154,6 @@ exports.tire_instance_delete_post = asyncHandler(async (req, res, next) => {
         return res.redirect(`/catalog/tireinstances?error=${error}`);
     }
 
-    //decrement stock
-    await Tire.findByIdAndUpdate(tireInstance.tire, { $inc: { stock: -1 }})  
     //delete instance
     await TireInstance.findByIdAndDelete(req.params.id)    
     res.redirect('/catalog/tireinstances');
@@ -165,6 +164,7 @@ exports.tire_instance_update_get = asyncHandler(async (req, res, next) => {
     //get tire
     const tireInstance = await TireInstance.findById(req.params.id)
             .populate({ path: 'tire', populate: { path: 'manufacturer category' }})
+            .populate('size')
             .exec()
 
     if (!tireInstance) {
@@ -201,6 +201,7 @@ exports.tire_instance_update_post = [
             //yes errors
             const tireInstance = await TireInstance.findById(req.params.id)
                 .populate({ path: 'tire', populate: { path: 'manufacturer category' }})
+                .populate('size')
                 .exec();
 
                 res.render('tire_instance_form', {
@@ -222,7 +223,8 @@ exports.tire_instance_update_post = [
                 res.render('tire_instance_form', {
                     title: 'Update Tire Instance',
                     tireInstance: await TireInstance.findById(req.params.id)
-                    .populate({ path: 'tire', populate: { path: 'manufacturer category' }}),
+                    .populate({ path: 'tire', populate: { path: 'manufacturer category' }})
+                    .populate('size'),
                     error: `Failed to Update tire instance due to database error: ${dbError}`,
             });
            }

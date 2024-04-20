@@ -13,7 +13,7 @@ TireSizeSchema.virtual('url').get(function () {
 })
 
 TireSizeSchema.virtual('size').get(function () {
-    return `${this.tread_width}/${this.aspect_ratio}/${this.wheel_dia}`
+    return `${this.tire_width}/${this.aspect_ratio}/${this.wheel_dia}`
 })
 
 module.exports = mongoose.model('TireSize', TireSizeSchema);

@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  h1 #{title}
+    p #{mfr.name}
+    p #{mfr.location}
+    p Are you sure you want to delete this manufacturer?
+
+  form(method='POST')
+    input#id.form-control(type='hidden', name='id', value=mfr._id)
+    button.btn.btn-danger(type='submit') Delete
+
+  if errors && errors.length > 0
+    ul
+      each error in errors
+        li!= error.msg
+

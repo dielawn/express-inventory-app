@@ -18,7 +18,7 @@ TireInstanceSchema.virtual('tire_name').get(function () {
 })
 
 TireInstanceSchema.virtual('tire_name_rating').get(function () {
-    return `${this.tire.manufacturer} ${this.tire.model} ${this.tire.category.load_speed_rating}`
+    return `${this.tire.manufacturer} ${this.tire.model} ${this.tire.category.tire_class}`
 })
 
 module.exports = mongoose.model('TireInstance', TireInstanceSchema);

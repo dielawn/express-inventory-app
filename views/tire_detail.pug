@@ -1,0 +1,35 @@
+extends layout
+
+block content
+  h1 Tire: #{tire.model_name}
+
+  p #[strong Manufacturer: ]
+    a(href=tire.manufacturer.url) #{tire.manufacturer.name} #{tire.manufacturer.location}
+  p #[strong Details:] #{tire.info}
+  p #[strong SKU:] #{tire.sku}
+  p #[strong Class: ]
+      a(href=tire.category.url) #{tire.category.tire_class} #{tire.category.season}
+
+  div(style='margin-left:20px;margin-top:20px')
+    h4 Qty Instock: #{tire_instances.length}
+
+    each val in tire_instances
+      hr
+      p #[strong Size: ] #{val.size}
+      p #[strong DOT: ] #{val.dot} 
+      p #[strong Date Code: ] #{val.date_code}
+
+    else
+      p There are no instances of this tire in the stock.
+
+  hr
+  p
+    a(href=tire.url+'/update') Update Tire
+  p
+    a(href=tire.url+'/delete') Delete Tire
+
+  if errors && errors.length > 0
+    ul
+      each error in errors
+        li!= error.msg
+

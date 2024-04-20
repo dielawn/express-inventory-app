@@ -1,6 +1,9 @@
 const Manufacturer = require('../models/manufacturer.js');
+const Tire = require('../models/tire.js');
+
 const { body, validationResult } = require("express-validator");
 const asyncHandler = require('express-async-handler');
+
 //display list of all Manufacturers
 exports.mfr_list = asyncHandler(async (req, res, next) => {
     try {
@@ -19,16 +22,20 @@ exports.mfr_list = asyncHandler(async (req, res, next) => {
 //display details page for each Manufacturer
 exports.mfr_detail = asyncHandler(async (req, res, next) => {
     try {
-        const mfr = await Manufacturer.findById(req,params.id).exec();
-
+        const [mfr, tiresOfMfr] = Promise.all([
+            Manufacturer.findById(req,params.id).exec(),
+            Tire.find({ manufacturer: req.params.id }).populate('category').exec(),//get all tires made by mfr
+        ])
+             
         if(!mfr) {
             const error = encodeURIComponent(`Invalid Id: ${req.params.id}.`)
             return res.redirect(`/catalog/mfr_list?error=${error}`);
         }
 
         res.render('mfr_detail', {
-            title: 'Manufacturer Details',
+            title: `Manufacturer Details ${mfr.name}`,
             mfr: mfr,
+            mfr_tires: tiresOfMfr,
         });
     } catch (dbError) {
         const error = encodeURIComponent(`Database read detail Error: ${dbError}.`)
