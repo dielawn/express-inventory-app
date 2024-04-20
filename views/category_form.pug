@@ -5,16 +5,12 @@ block content
 
   form(method='POST')
     div.form-group
-      label(for='load_speed_rating') Load/Speed rating:
-      input#load_speed_rating.form-control(type='text', placeholder='Load/Speed rating', name='load_speed_rating', value=(category ? category.load_speed_rating : ''))
+      label(for='tire_class') Tire Class:
+      input#tire_class.form-control(type='text', placeholder='Tire class', name='tire_class', value=(category ? category.tire_class : ''))
 
     div.form-group
       label(for='season') Season:
       input#season.form-control(type='text', placeholder='Season', name='season', value=(category ? category.season : ''))
-
-    div.form-group
-      label(for='type') Type or Best use:
-      input#type.form-control(type='text', placeholder='Type', name='type', value=(category ? category.type : ''))
 
     div.form-group
       label(for='description') Description:

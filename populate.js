@@ -59,14 +59,13 @@ console.log(
     console.log(`Added manufacturer: ${manufacturer.name} ${manufacturer.location}`);
   }
   
-  async function tireCreate(index, modelName, manufacturer, info, sku, category, stock, costPrice, listPrice) {
+  async function tireCreate(index, modelName, manufacturer, info, sku, category, costPrice, listPrice) {
     const tireDetail = {
       model_name: modelName,
       manufacturer: manufacturer,
       info: info,
       sku: sku,
       category: category,
-      stock: stock,
       cost_price: costPrice,
       list_price: listPrice
     };

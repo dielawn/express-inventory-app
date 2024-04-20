@@ -2,17 +2,16 @@ extends layout
 
 block content
   h1= title
-  if category_list.length
+  if categories && categories.length
     ul
-      each category in category_list
+      each category in categories
         li
           a(href=category.url) #{category.tire_class}
-          |  (#{category.season}) 
-
+          |  (#{category.season})
   else
-    p There are no categorys.
+    p There are no categories.
 
   if errors && errors.length > 0
-      ul
-        each error in errors
-          li!= error.msg
+    ul
+      each error in errors
+        li!= error.msg

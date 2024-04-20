@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  h1 Delete Tire Class: #{category.tire_class} (#{category.season})
+  p Are you sure you want to delete this tire class?
+
+  form(method='POST')
+    input#id.form-control(type='hidden', name='id', value=category._id)
+    button.btn.btn-danger(type='submit') Delete
+
+  if errors && errors.length > 0
+    ul
+      each error in errors
+        li!= error.msg
+

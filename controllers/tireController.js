@@ -107,10 +107,6 @@ exports.tire_create_post = [
         .trim()
         .isLength({ min: 1 })
         .escape(),
-    body('stock', 'Stock must not be empty')
-        .trim()
-        .isLength({ min: 1 })
-        .escape(),
     body('cost_price', 'Cost must not be empty.')
         .trim()
         .isLength({ min: 1 })
@@ -130,7 +126,6 @@ exports.tire_create_post = [
             info: req.body.info,
             sku: req.body.sku,
             category: req.body.category,
-            stock: req.body.stock,
             cost_price: req.body.cost_price,
             list_price: req.body.list_price,    
         });
@@ -277,10 +272,6 @@ exports.tire_update_post = [
         .trim()
         .isLength({ min: 1 })
         .escape(),
-    body('stock', 'Stock must not be empty')
-        .trim()
-        .isLength({ min: 1 })
-        .escape(),
     body('cost_price', 'Cost must not be empty.')
         .trim()
         .isLength({ min: 1 })
@@ -323,7 +314,6 @@ exports.tire_update_post = [
                     info: req.body.info,
                     sku: req.body.sku,
                     category: req.body.category,
-                    stock: req.body.stock,
                     cost_price: req.body.cost_price,
                     list_price: req.body.list_price
                 }, { new: true });

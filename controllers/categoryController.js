@@ -21,7 +21,7 @@ exports.category_list = asyncHandler(async (req, res, next) => {
 exports.category_detail = asyncHandler(async (req, res, next) => {
     try {
         const category = await Category.findById(req.params.id)
-
+       
         if (!category) {
             const error = encodeURIComponent(`Cannot find ID: ${req.params.id}`)
             return res.redirect(`/catalog/categories?error=${error}`)
@@ -63,7 +63,7 @@ exports.category_create_post = [
         const errors = validationResult(req);
 
         if (!errors.isEmpty()) {
-            //is error open form
+            //error open form
             res.render('category_form', {
                 title: 'Create Category',
                 category: req.body, //pass the submitted data back to the form
@@ -97,7 +97,7 @@ exports.category_delete_get = asyncHandler(async (req, res, next) => {
             return res.redirect(`/catalog/categories?error=${error}`);
         }
         res.render('category_delete', {
-            title: 'Category Delete',
+            title: 'Delete Category',
             category: category,
         })
     } catch (dbError) {
