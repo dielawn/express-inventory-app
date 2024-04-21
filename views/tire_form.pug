@@ -7,13 +7,13 @@ block content
     div.form-group
       label(for='manufacturer') Manufacturers:
         select#manufacturer.form-control(name='manufacturer' required)
-          option(value='') --Please select an manufacturer--
+          option(value='') --Please select a manufacturer--
           each manufacturer in manufacturers           
             - const selected = tire && tire.manufacturer && manufacturer._id.toString() === tire.manufacturer._id.toString()
             if seleected 
               option(value=manufacturer._id selected)= manufacturer.name 
             else 
-              option(value=anufacturer._id)= manufacturer.name           
+              option(value=manufacturer._id)= manufacturer.name           
     div.form-group
       label(for='model_name') Model:
       input#model_name.form-control(type='text', placeholder='Model of tire' name='model_name' required value=(undefined===tire ? '' : tire.model_name))
@@ -24,15 +24,15 @@ block content
       label(for='sku') SKU:
       input#sku.form-control(type='text', placeholder='sku13' name='sku' value=(undefined===tire ? '' : tire.sku) required)
     div.form-group
-      label Category:
-      div
-        for category in categories
-          div(style='display: inline; padding-right:10px;')
-            if category.checked
-              input.checkbox-input(type='checkbox', name='category', id=category._id, value=category._id, checked)
-            else
-              input.checkbox-input(type='checkbox', name='category', id=category._id, value=category._id)
-            label(for=category._id) &nbsp;#{category.name}
+      label Categories:
+       select#category.form-control(name='category' required)
+          option(value='') --Please select a category--
+          each category in categories           
+            - const selected = tire && tire.category && category._id.toString() === tire.category._id.toString()
+            if seleected 
+              option(value=category._id selected)= category.tire_class 
+            else 
+              option(value=category._id)= category.tire_class  
     div.form-group 
       label Cost Price 
       input#cost.form-control(type='number', name='cost_price', required)

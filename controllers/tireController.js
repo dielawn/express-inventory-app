@@ -77,15 +77,19 @@ exports.tire_detail = asyncHandler(async (req, res, next) => {
 //display create new tire form on GET
 exports.tire_create_get = asyncHandler(async (req, res, next) => {
     try {
-        const [manufacturer, category] = await Promise.all([
+        const [manufacturers, categories] = await Promise.all([
             Manufacturer.find({}).exec(),
             Category.find({}).exec()
         ]);
 
+        console.log("Manufacturers:", manufacturers);
+console.log("Categories:", categories);
+
+
         res.render('tire_form', {
             title: 'New Tire Form',
-            manufacturer: manufacturer,
-            category: category,
+            manufacturers: manufacturers,
+            categories: categories,
         });
     } catch (dbError) {
         const error = encodeURIComponent(`Database GET Create Error: ${dbError}.`)
@@ -150,8 +154,8 @@ exports.tire_create_post = [
 
                 res.render('tire_form', {
                     title: 'New Tire Form',
-                    manufacturer: manufacturers,
-                    category: categories,
+                    manufacturers: manufacturers,
+                    categories: categories,
                     tire: tire,
                     errors: errors.array(),
                 })
@@ -249,8 +253,8 @@ exports.tire_update_get = asyncHandler(async (req, res, next) => {
     
         res.render('tire_form', {
             title: 'Update Tire Form',
-                    manufacturer: allManufacturers,
-                    category: allCategories,
+                    manufacturers: allManufacturers,
+                    categories: allCategories,
                     tire: tire,
         });
     } catch (dbError) {
@@ -305,8 +309,8 @@ exports.tire_update_post = [
 
                 res.render('tire_form', {
                     title: 'Update Tire',
-                    manufacturer: manufacturer,
-                    category: categories,
+                    manufacturers: manufacturer,
+                    categories: categories,
                     tire: {...tire.toObject(), ...req.body}, // Merge persistent tire data with user inputs
                     errors: errors.array(),
                 });
