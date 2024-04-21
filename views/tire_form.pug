@@ -17,9 +17,6 @@ block content
     div.form-group
       label(for='model_name') Model:
       input#model_name.form-control(type='text', placeholder='Model of tire' name='model_name' required value=(undefined===tire ? '' : tire.model_name))
-     div.form-group
-      label(for='size') Size:
-      textarea#size.form-control(placeholder='Size' name='size' required)= undefined===tire ? '' : tire.size
     div.form-group
       label(for='info') Info:
       textarea#info.form-control(placeholder='Info' name='info' required)= undefined===tire ? '' : tire.info

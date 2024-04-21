@@ -27,9 +27,7 @@ console.log(
   const mongoDB = userArgs[0];
   
   main().catch((err) => console.log(err));
-
-  
-  
+ 
   async function main() {
     console.log("Debug: About to connect");
     await mongoose.connect(mongoDB);

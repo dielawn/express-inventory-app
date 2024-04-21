@@ -9,7 +9,7 @@ const asyncHandler = require('express-async-handler');
 exports.size_list = asyncHandler(async (req, res, next) => {
     try {
         const allSizes = await TireSize.find().sort({ wheel_dia: 1 }).exec()
-        res.render('tire_size_list', {
+        res.render('size_list', {
             title: 'All Tire Sizes:',
             size_list: allSizes,
         });

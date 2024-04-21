@@ -6,8 +6,8 @@ block content
     ul
       each instance in tire_instances
         li
-          a(href=instance.url) #{instance.dot}
-          |  (#{instance.tire_name}) #{instance.size.size} 
+          a(href=instance.url) #{instance.dot} 
+          | #[strong Date code:] #{instance.date_code} #[strong Size: ] #{instance.size.size} #[strong Mfr/Model:] #{instance.tire.manufacturer.name} #{instance.tire.model_name}  
   else
     p There are no instances.
 

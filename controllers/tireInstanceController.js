@@ -1,4 +1,4 @@
-const TireInstance = require('../models/tireinstance.js');
+const TireInstance = require('../models/tireInstance.js');
 const Tire = require('../models/tire.js');
 
 const { body, validationResult } = require("express-validator");
