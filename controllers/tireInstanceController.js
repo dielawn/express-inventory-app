@@ -30,6 +30,7 @@ exports.tire_instance_detail = asyncHandler(async (req, res, next) => {
         const tireInstance = await TireInstance.findById(req.params.id)                            
             .populate({ path: 'tire', populate: { path: 'manufacturer category' }})
             .populate('size')
+            .exec()
 
         if (tireInstance === null) {
             const error = encodeURIComponent(`Tire instance with ID: ${req.params.id} not found.`);

@@ -60,7 +60,7 @@ exports.tire_detail = asyncHandler(async (req, res, next) => {
     try {
         const [tire, tireInstances] = await Promise.all([
             Tire.findById(req.params.id).populate('manufacturer').populate('category').exec(),
-            TireInstance.find({ tire: req.params.id }).exec()
+            TireInstance.find({ tire: req.params.id }).populate('size').exec()
         ]);
 
         res.render('tire_detail', {
@@ -82,9 +82,7 @@ exports.tire_create_get = asyncHandler(async (req, res, next) => {
             Category.find({}).exec()
         ]);
 
-        console.log("Manufacturers:", manufacturers);
-console.log("Categories:", categories);
-
+        
 
         res.render('tire_form', {
             title: 'New Tire Form',
@@ -145,7 +143,7 @@ exports.tire_create_post = [
         });
         
         if (!errors.isEmpty()) {
-            try {
+          
                 //there are errors      
                 const [manufacturers, categories] = await Promise.all([
                     Manufacturer.find().exec(),
@@ -159,15 +157,13 @@ exports.tire_create_post = [
                     tire: tire,
                     errors: errors.array(),
                 })
-            } catch (dbError) {
-                const error = encodeURIComponent(`Database error during data retrieval: ${dbError.message}`);
-                return res.redirect(`/catalog/tires?error=${error}`);
-            } 
+    
         } else {
             try {
                 //form data is valid
+                console.log('url', tire.url)
                 await tire.save()
-                res.redirect(tire.url);
+                res.redirect('/catalog/tires/');
             } catch (dbError) {
                 const error = encodeURIComponent(`Database POST Create Error: ${dbError}.`)
                 return res.redirect(`/catalog/tires?error=${error}`);

@@ -15,8 +15,9 @@ block content
 
     each val in tire_instances
       hr
-      p #[strong Size: ] #{val.size}
-      p #[strong DOT: ] #{val.dot} 
+      p #[strong DOT: ] 
+        a(href=val.url) #{val.dot} 
+      p #[strong Size: ] #{val.size.size}
       p #[strong Date Code: ] #{val.date_code}
 
     else

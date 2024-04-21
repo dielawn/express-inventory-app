@@ -14,7 +14,7 @@ exports.mfr_list = asyncHandler(async (req, res, next) => {
             mfrs: allMfrs,
         });
     } catch (dbError) {
-        const error = encodeURIComponent(`Database read list Error: ${dbError}.`)
+        const error = encodeURIComponent(`Database read list Error: ${dbError.message}.`)
         return res.redirect(`/catalog/manufacturers?error=${error}`);
     }
 });
@@ -22,8 +22,8 @@ exports.mfr_list = asyncHandler(async (req, res, next) => {
 //display details page for each Manufacturer
 exports.mfr_detail = asyncHandler(async (req, res, next) => {
     try {
-        const [mfr, tiresOfMfr] = Promise.all([
-            Manufacturer.findById(req,params.id).exec(),
+        const [mfr, tiresOfMfr] = await Promise.all([
+            Manufacturer.findById(req.params.id).exec(),
             Tire.find({ manufacturer: req.params.id }).populate('category').exec(),//get all tires made by mfr
         ])
              
@@ -31,14 +31,14 @@ exports.mfr_detail = asyncHandler(async (req, res, next) => {
             const error = encodeURIComponent(`Invalid Id: ${req.params.id}.`)
             return res.redirect(`/catalog/mfr_list?error=${error}`);
         }
-
+        
         res.render('mfr_detail', {
             title: `Manufacturer Details ${mfr.name}`,
             mfr: mfr,
             mfr_tires: tiresOfMfr,
         });
     } catch (dbError) {
-        const error = encodeURIComponent(`Database read detail Error: ${dbError}.`)
+        const error = encodeURIComponent(`Database read detail Error: ${dbError.message}.`)
         return res.redirect(`/catalog/manufacturers?error=${error}`);
     }   
 });
