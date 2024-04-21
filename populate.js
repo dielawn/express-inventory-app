@@ -9,7 +9,7 @@ console.log(
   
   const Tire = require('./models/tire.js');
   const TireSize = require('./models/tire_size.js')
-  const TireInstance = require('./models/tireIsnstance.js');
+  const TireInstance = require('./models/tireInstance.js');
   const Manufacturer = require('./models/manufacturer.js');
   const Category = require('./models/category.js');
   
@@ -27,6 +27,8 @@ console.log(
   const mongoDB = userArgs[0];
   
   main().catch((err) => console.log(err));
+
+  
   
   async function main() {
     console.log("Debug: About to connect");
@@ -48,7 +50,7 @@ console.log(
     const categoryDetail = { tire_class: tireClass, season: season, description: description }
     const category = new Category(categoryDetail);
     await category.save();
-    category[index] = category;
+    categories[index] = category;
     console.log(`Added category: ${categoryDetail.tire_class}, ${categoryDetail.season}`);
   }
   
@@ -73,7 +75,7 @@ console.log(
   
     const tire = new Tire(tireDetail);
     await tire.save();
-    tire[index] = tire;
+    tires[index] = tire;
     console.log(`Added tire: ${tire.model_name}`);
   }
   
@@ -100,8 +102,8 @@ console.log(
 
     const tireSize = new TireSize(sizeDetail);
     await tireSize.save();
-    tireSize[index] = tireSize;
-    console.slog(`Added size: ${this.tread_width}/${this.aspect_ratio}/${this.wheel_dia}`)
+    sizes[index] = tireSize;
+    console.log(`Added size: ${sizeDetail.tire_width}/${sizeDetail.aspect_ratio}/${sizeDetail.wheel_dia}`)
   };
   
   async function createCategories() {
@@ -172,7 +174,6 @@ console.log(
         "Take on the road with a quiet, comfortable ride with the Turanza QuietTrack touring tire. These impressive all-season tires deliver control in wet and snowy conditions and are built to last for up to 80,000 miles*. Designed to fit many of today’s most popular cars and sedans, the Turanza QuietTrack is engineered to impress.",
         "9781473211896",
         categories[1],
-        tireInstances.tire.length,
         180.79,
         217.99,        
       ),
@@ -181,8 +182,7 @@ console.log(
         manufacturers[0],
         'Take your sports car for a spin with more power from the Potenza S007A RFT. These tires will elevate your experience with higher contact pressure of the tire to the road for better braking in wet conditions. Engineered for a thrilling ride, the tread pattern allows greater stability and control during cornering and also offers excellent responsiveness.',
         "9788401352836",
-        categories[10],
-        tireInstances.tire.length,        
+        categories[10],        
         262.45,
         364.99,
       ),
@@ -191,8 +191,7 @@ console.log(
         manufacturers[0],
         "Get the most of out your sports car this winter with the BlizzakTM LM005 winter performance tire. Its high sipe density tread assists with traction on snow and ice, while the advanced tread compound provides confident grip and braking. Whatever winter throws your way – from rain and slush to snow and ice – the BlizzakTM LM005 tire will keep you moving in various conditions.",
         "9780756411336",
-        categories[14],
-        tireInstances.tire.length, 
+        categories[14], 
         311.25,
         375.99,
       ),
@@ -202,7 +201,6 @@ console.log(
         "Give your truck heavy-duty performance year after year with technologies engineered around confident traction on wet and dry surfaces with the Dueler H/T 685 tires",
         "9780765379528",
         categories[21],
-        tireInstances.tire.length,
         225.62,
         306.99,       
       ),
@@ -212,7 +210,6 @@ console.log(
         "Take on the most intense weather conditions both on and off road with Dueler A/T Revo 3 tires. Engineered with our advanced Traction Claw™ technology, these tires improve driving performance on wet and snowy surfaces.",
         "9780765379504",
         categories[6],        
-        tireInstances.tire.length,
         311.11,
         353.99,
       ),
@@ -222,7 +219,6 @@ console.log(
         "TractiveGroove Technology™ offers enhanced traction in deep mud and snow. Self-cleaning shoulder blocks clear the tread of debris for enhanced dirt, gravel and mud traction. Highly angled center tread blocks enhance traction and lateral stability while reducing road noise.",
         "ISBN111111",
         categories[0],
-        tireInstances.tire.length,
         225.65,
         345.99,       
       ),
@@ -232,7 +228,6 @@ console.log(
         'Our best all-season tire has an asymmetric tread pattern and sweeping traction grooves to evacuate water and deliver excellent wet traction. As the tire wears, Evolving Traction Grooves™ transition from deep grooves to wide grooves to help displace water on the road.',
         "ISBN222222",
         categories[1],
-        tireInstances.tire.length,
         185.45,
         225.99,
       ),

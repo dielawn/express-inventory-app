@@ -2,6 +2,7 @@ const Tire = require('../models/tire.js');
 const TireInstance = require('../models/tireInstance.js');
 const Manufacturer = require('../models/manufacturer.js');
 const Category = require('../models/category.js');
+const Size = require('../models/tire_size.js')
 
 const { body, validationResult } = require("express-validator");
 const asyncHandler = require('express-async-handler');
@@ -9,26 +10,35 @@ const asyncHandler = require('express-async-handler');
 
 //display details of tires, tire instances, mfg, and categories
 exports.index = asyncHandler(async (req, res, next) => {
-    const [
-        numTires,
-        numTireInstances,
-        numMfr,
-        numCat,
-    ] = await Promise.all([
-        Tire.countDocuments({}).exec(),
-        TireInstance.countDocuments({}).exec(),
-        Manufacturer.countDocuments({}).exec(),
-        Category.countDocuments({}).exec(),
-    ]);
+    try {
+        const [
+            numTires,
+            numTireInstances,
+            numMfr,
+            numCat,
+            numSizes,
+        ] = await Promise.all([
+            Tire.countDocuments({}).exec(),
+            TireInstance.countDocuments({}).exec(),
+            Manufacturer.countDocuments({}).exec(),
+            Category.countDocuments({}).exec(),
+            Size.countDocuments({}).exec()
+        ]);
 
-    res.render('index', {
-        title: 'Tire Inventory',
-        tire_count: numTires,
-        instance_count: numTireInstances,
-        mfr_count: numMfr,
-        category_count: numCat,
-    });
+        res.render('index', {
+            title: 'Tire Inventory',
+            tire_count: numTires,
+            instance_count: numTireInstances,
+            mfr_count: numMfr,
+            category_count: numCat,
+            size_count: numSizes,
+        });
+    } catch (dbError) {
+        const errorMsg = encodeURIComponent(`Failed to load inventory data: ${dbError.message}`);
+        res.redirect(`/error?msg=${errorMsg}`);
+    }
 });
+
 
 
 //display list of all tire models

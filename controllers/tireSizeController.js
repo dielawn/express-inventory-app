@@ -184,7 +184,6 @@ exports.size_delete_get = asyncHandler(async (req, res, next) => {
         res.render('size_delete', {
             title: `Delete Size: ${size.size}`,
             size: size,
-            ass_tires: associatedInstances,
         });
     } catch (dbError) {
         const error = encodeURIComponent(`Database GET delete error: ${dbError.message}`)

@@ -7,11 +7,11 @@ block content
   p The Inventory has the following record counts: 
   
   ul
-    li #[strong Tire models:] !{numTires}
-      a(href=tires.url) All Tires
-    li #[strong Tire count] !{numInstances}
-    li #[strong Manufacturer count:] !{numMfr}
-    li #[strong Category count:] !{numCat}
+    li #[strong Tire models:] !{tire_count}
+    li #[strong Tire instance count] !{instance_count}
+    li #[strong Manufacturer count:] !{mfr_count}
+    li #[strong Category count:] !{category_count}
+    li #[strong Size count:] !{size_count}
 
   if errors && errors.length > 0
   ul
