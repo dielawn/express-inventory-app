@@ -12,13 +12,13 @@ block content
 
   div(style='margin-left:20px;margin-top:20px')
     h4 Qty Instock: #{tire_instances.length}
-
-    each val in tire_instances
-      hr
-      p #[strong DOT: ] 
-        a(href=val.url) #{val.dot} 
-      p #[strong Size: ] #{val.size.size}
-      p #[strong Date Code: ] #{val.date_code}
+    if tire_instance
+      each val in tire_instances
+        hr
+        p #[strong DOT: ] 
+          a(href=val.url) #{val.dot} 
+        p #[strong Size: ] #{val.size.size}
+        p #[strong Date Code: ] #{val.date_code}
 
     else
       p There are no instances of this tire in the stock.
