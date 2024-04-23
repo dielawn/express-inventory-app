@@ -60,7 +60,12 @@ exports.tire_detail = asyncHandler(async (req, res, next) => {
     try {
         const [tire, tireInstances] = await Promise.all([
             Tire.findById(req.params.id).populate('manufacturer').populate('category').exec(),
-            TireInstance.findById({ tire: req.params.id }).populate('size').exec()
+            TireInstance.find({ tire: req.params.id })
+            .populate({
+                path: 'tire',
+                populate: { path: 'manufacturer category' }  // Assuming these are also properly set up in the Tire schema
+            })
+            .populate('size').exec()
         ]);
 
         res.render('tire_detail', {
@@ -234,7 +239,7 @@ exports.tire_update_get = asyncHandler(async (req, res, next) => {
         const [tire, allManufacturers, allCategories] = await Promise.all([
             Tire.findById(req.params.id).populate('manufacturer').populate('category').exec(),
             Manufacturer.find().sort({ company: 1 }).exec(),
-            Category.find().sort({ load_speed_rating: 1 }).exec()
+            Category.find().sort({ tire_class: 1 }).exec()
         ]);
     
         if (tire === null) {
