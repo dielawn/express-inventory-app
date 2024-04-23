@@ -17,7 +17,7 @@ TireSchema.virtual('url').get(function () {
 });
 
 TireSchema.virtual('tire_name').get(function () {
-    return `${this.manufacturer} ${this.model_name}`
+    return `${this.manufacturer.name} ${this.model_name}`
 });
 
 TireSchema.virtual('tire_name_rating').get(function () {
