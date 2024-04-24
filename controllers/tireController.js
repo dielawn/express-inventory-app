@@ -63,7 +63,7 @@ exports.tire_detail = asyncHandler(async (req, res, next) => {
             TireInstance.find({ tire: req.params.id })
             .populate({
                 path: 'tire',
-                populate: { path: 'manufacturer category' }  // Assuming these are also properly set up in the Tire schema
+                populate: { path: 'manufacturer category' }
             })
             .populate('size').exec()
         ]);
@@ -214,7 +214,7 @@ exports.tire_delete_post = asyncHandler(async (req, res, next) => {
 
     if (tireInstances.length > 0) {
         res.render('tire_delete', {
-            title: 'Delete Tire',
+            title: 'Delete',
             tire: tire,
             tire_instances: tireInstances,
             error: 'Cannot delete tire, delete tire instances first.'

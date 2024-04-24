@@ -7,8 +7,11 @@ block content
     a(href=tire.manufacturer.url) #{tire.manufacturer.name} #{tire.manufacturer.location}
   p #[strong Details:] #{tire.info}
   p #[strong SKU:] #{tire.sku}
-  p #[strong Class: ]
+  if tire.category
+    p #[strong Class: ]
       a(href=tire.category.url) #{tire.category.tire_class} #{tire.category.season}
+  else
+    p No category details available.
 
   div(style='margin-left:20px;margin-top:20px')
     h4 Qty Instock: #{tire_instances.length}

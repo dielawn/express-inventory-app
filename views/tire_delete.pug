@@ -2,51 +2,24 @@ extends layout
 
 block content
 
-  h1 #{title}: #{tire.model} 
+  h1 #{title}: #{tire.model_name} 
   
-  p #[strong Manufacturer: ]
-    a(href=tire.manufacturer.url) #{tire.manufacturer}
-  p #[strong Tire: ]
-    a(href=tire.model_name.url) #{tire.model_name}
-  p #[strong Tire size: ] #{tire.size}
-    
-  p #[strong Details:] #{tire.info}
-  p #[strong SKU:] #{tire.sku}
-  p #[strong Genre: ]
-    each val, index in book.genre
-      a(href=val.url) #{val.name}
-      if index < book.genre.length - 1
-        |,&nbsp;
+  div(style='margin-left:20px;margin-top:20px')
 
-  hr
+  if tire_instances.length
 
-  if book_instances.length
-
-    p #[strong Delete the following copies before attempting to delete this Book.]
-
-    div(style='margin-left:20px;margin-top:20px')
-
-      h4 Copies
-
-      each book_copy in book_instances
-        hr
-        if book_copy.status=='Available'
-          p.text-success #{book_copy.status}
-        else if book_copy.status=='Maintenance'
-          p.text-danger #{book_copy.status}
-        else
-          p.text-warning #{book_copy.status}
-        p #[strong Imprint:] #{book_copy.imprint}
-        if book_copy.status!='Available'
-          p #[strong Due back:] #{book_copy.due_back}
-        p #[strong Id:]
-          a(href=book_copy.url) #{book_copy._id}
+    p #[strong Delete the following copies before attempting to delete this Book.] 
 
   else
-    p Do you really want to delete this Book?
+
+    p Do you really want to delete #[strong #{tire.model_name}]?
 
     form(method='POST')
       div.form-group
-        input#id.form-control(type='hidden',name='id', value=book._id )
+        input#id.form-control(type='hidden',name='id', value=tire._id )
+        button.btn.btn-primary(type='submit') Delete  
 
-      button.btn.btn-primary(type='submit') Delete
+  if errors && errors.length > 0
+    ul
+      each error in errors
+        li!= error.msg
