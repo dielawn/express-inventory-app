@@ -85,9 +85,7 @@ exports.tire_create_get = asyncHandler(async (req, res, next) => {
         const [manufacturers, categories] = await Promise.all([
             Manufacturer.find({}).exec(),
             Category.find({}).exec()
-        ]);
-
-        
+        ]);       
 
         res.render('tire_form', {
             title: 'New Tire Form',

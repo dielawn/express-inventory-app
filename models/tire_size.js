@@ -9,7 +9,7 @@ const TireSizeSchema = new Schema({
 });
 
 TireSizeSchema.virtual('url').get(function () {
-    return `/catalog/sizes/${this._id}`
+    return `/catalog/size/${this._id}`
 })
 
 TireSizeSchema.virtual('size').get(function () {

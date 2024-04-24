@@ -8,10 +8,20 @@ const asyncHandler = require('express-async-handler');
 //list
 exports.size_list = asyncHandler(async (req, res, next) => {
     try {
-        const allSizes = await TireSize.find().sort({ wheel_dia: 1 }).exec()
+        const [allSizes, allSizeInstances ] = await Promise.all([
+            TireSize.find().sort({ wheel_dia: 1 })
+            .exec(),
+            TireInstance.find({ size: req.params.id })
+            .populate({
+                path: 'tire',
+                populate: { path: 'manufacturer category' }
+            })
+            .populate('size').exec()
+        ])
         res.render('size_list', {
             title: 'All Tire Sizes:',
             size_list: allSizes,
+            instances: allSizeInstances,
         });
     } catch (dbError) {
         const error = encodeURIComponent(`Database read list Error: ${dbError.message}.`)
@@ -23,10 +33,20 @@ exports.size_list = asyncHandler(async (req, res, next) => {
 exports.size_detail = asyncHandler(async (req, res, next) => {
     try {
         //find all tires of a certain size
-        const instancesOfSize = await Tire.findById(req.params.id).exec() 
+        const [ size, allSizeInstances ] = await Promise.all([
+            TireSize.findById(req.params.id).sort({ wheel_dia: 1 })
+            .exec(),
+            TireInstance.find({ size: req.params.id })
+            .populate({
+                path: 'tire',
+                populate: { path: 'manufacturer category' }
+            })
+            .populate('size').exec()
+        ]);
         res.render('size_detail', {
-            title: 'Size:',
-            size: instancesOfSize,
+            title: 'Size',
+            size: size,
+            instances: allSizeInstances,
         })
     } catch (dbError) {
         const error = encodeURIComponent(`Database read detail Error: ${dbError.message}.`)

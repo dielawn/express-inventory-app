@@ -2,11 +2,16 @@ extends layout
 
 block content
 
-  h1 #{title}
+  h1 #{title} #{size.size}
 
   div(style='margin-left:20px;margin-top:20px')
-    h4 #{size.size}
-       
+    //list all instances of size
+  if instances && instances.length
+    each inst in instances
+      p 
+        a(href=inst.url) #{inst.dot}  #{inst.tire.model_name}
+  else 
+    p No tires of this size.     
   hr
   p
     a(href=size.url+'/delete') Delete size
