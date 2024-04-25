@@ -1,5 +1,6 @@
 const TireInstance = require('../models/tireInstance.js');
 const Tire = require('../models/tire.js');
+const Size = require('../models/tire_size.js')
 
 const { body, validationResult } = require("express-validator");
 const asyncHandler = require('express-async-handler');
@@ -51,13 +52,8 @@ exports.tire_instance_detail = asyncHandler(async (req, res, next) => {
 exports.tire_instance_create_get = asyncHandler(async (req, res, next) => {
 
    try {
-    const [tires, tireInstance] = await Promise.all([
-        Tire.find().sort({ model_name: 1}).exec(),
-        TireInstance.findById(req.params.id)
-            .populate({ path: 'tire', populate: { path: 'manufacturer category' }})
-            .populate('size')
-            .exec()
-    ]) 
+    const tires = await Tire.find().sort({ model_name: 1}).exec();
+    const sizes = await Size.find().sort({ size: 1 }).exec()
     //no tires to create instance of
     if (!tires.length) {
         const error = encodeURIComponent(`No tires available, create tire before creating instance`);
@@ -66,8 +62,8 @@ exports.tire_instance_create_get = asyncHandler(async (req, res, next) => {
     //display form
     res.render('tire_instance_form', {
         title: 'Create Tire Instance',
-        tires: tires, 
-        tire_instances: tireInstance,
+        tires: tires,
+        sizes: sizes,
     });
     //database error redirect to tire list
    } catch (dbError) {
