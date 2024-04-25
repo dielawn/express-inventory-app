@@ -10,15 +10,15 @@ const TireInstanceSchema = new Schema({
 });
 
 TireInstanceSchema.virtual('url').get(function () {
-    return `/catalog/tireinstances/${this._id}`
+    return `/catalog/tireinstance/${this._id}`
 })
 
 TireInstanceSchema.virtual('tire_name').get(function () {
-    return `${this.tire.manufacturer} ${this.tire.model}`
+    return `${this.tire.manufacturer.name} ${this.tire.model_name}`
 })
 
 TireInstanceSchema.virtual('tire_name_rating').get(function () {
-    return `${this.tire.manufacturer} ${this.tire.model} ${this.tire.category.tire_class}`
+    return `${this.tire.manufacturer.name} ${this.tire.model_name} ${this.tire.category.tire_class}`
 })
 
 module.exports = mongoose.model('TireInstance', TireInstanceSchema);

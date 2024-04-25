@@ -5,9 +5,9 @@ block content
   h1 #{title} 
 
   div(style='margin-left:20px;margin-top:20px')
-    h4  #{tire_instance.tire_name_rating} 
-    p Size: #{tire_instance.size} 
-    p Date code: #{tire_instance.date_code}
+    h4  #{tire_instance.tire.manufacturer.name} #{tire_instance.tire.model_name} #{tire_instance.tire.category.tire_class}
+    p #[strong Size:] #{tire_instance.size.size} 
+    p #[strong Date code:] #{tire_instance.date_code}
     
   hr
   p

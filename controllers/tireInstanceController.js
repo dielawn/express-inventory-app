@@ -37,6 +37,8 @@ exports.tire_instance_detail = asyncHandler(async (req, res, next) => {
             const error = encodeURIComponent(`Tire instance with ID: ${req.params.id} not found.`);
             return res.redirect(`/catalog/tireinstances?error=${error}`)
         }                  
+        console.log(tireInstance.tire.manufacturer);  // See exactly what this outputs
+
 
         res.render('tire_instance_detail', {
             title:  `Tire: ${tireInstance.tire ? tireInstance.dot : 'Unknown'}`,
