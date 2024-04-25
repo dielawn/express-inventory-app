@@ -51,16 +51,23 @@ exports.tire_instance_detail = asyncHandler(async (req, res, next) => {
 exports.tire_instance_create_get = asyncHandler(async (req, res, next) => {
 
    try {
-    const allTires = await Tire.find().sort({ model_name: 1}).exec();
+    const [tires, tireInstance] = await Promise.all([
+        Tire.find().sort({ model_name: 1}).exec(),
+        TireInstance.findById(req.params.id)
+            .populate({ path: 'tire', populate: { path: 'manufacturer category' }})
+            .populate('size')
+            .exec()
+    ]) 
     //no tires to create instance of
-    if (!allTires.length) {
+    if (!tires.length) {
         const error = encodeURIComponent(`No tires available, create tire before creating instance`);
         res.redirect(`/catalog/tires?error=${error}`);
     }  
     //display form
     res.render('tire_instance_form', {
         title: 'Create Tire Instance',
-        tire_list: allTires,
+        tires: tires, 
+        tire_instances: tireInstance,
     });
     //database error redirect to tire list
    } catch (dbError) {

@@ -2,15 +2,13 @@ extends layout
 
 block content
   h1 #{title}
-  if size
+  
    p Are you sure you want to delete this tire size?
 
   form(method='POST')
     input#id.form-control(type='hidden', name='id', value=size._id)
     button.btn.btn-danger(type='submit') Delete
-  else
-    p No tire size was found to delete.
-  
+    
   if errors && errors.length > 0
     ul
       each error in errors
