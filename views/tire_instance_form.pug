@@ -4,27 +4,27 @@ block content
   h1= title 
 
   form(method='POST')
-   div.form-group
-    label(for='tire') Tire Models:
-    select#tire.form-control(name='tire' required)
-      option(value='') --Please select a tire model--
-      each tire in tires
-        option(value=tire._id)= tire.model_name
+    div.form-group
+      label(for='tire') Tire Models:
+      select#tire.form-control(name='tire' required)
+        option(value='') --Please select a tire model--
+        each tire in tires
+          option(value=tire._id)= tire.model_name
 
     div.form-group
-    label(for='size') Sizes:
-    select#size.form-control(name='size' required)
-      option(value='') --Please select a tire size--
-      each size in sizes
-        option(value=size._id)= size.size
+      label(for='size') Sizes:
+      select#size.form-control(name='size' required)
+        option(value='') --Please select a tire size--
+        each size in sizes
+          option(value=size._id)= size.size
 
-  div.form-group
-    label(for='dot') DOT:
-    input#dot.form-control(type='text', placeholder='DOT', name='dot', required)
+    div.form-group
+      label(for='dot') DOT:
+      input#dot.form-control(type='text', placeholder='DOT', name='dot', required)
 
-  div.form-group
-    label(for='date_code') Date Code:
-    input#date_code.form-control(type='text', placeholder='Date code', name='date_code', required)
+    div.form-group
+      label(for='date_code') Date Code:
+      input#date_code.form-control(type='text', placeholder='Date code', name='date_code', required)
 
     button.btn.btn-primary(type='submit') Submit
 

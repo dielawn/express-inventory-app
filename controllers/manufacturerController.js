@@ -95,7 +95,7 @@ exports.mfr_create_post = [
             await newMfr.save();
             res.redirect(newMfr.url)
         }
-    })
+    }),
 ];
 //display Manufacturer delete form on GET
 exports.mfr_delete_get = asyncHandler(async (req, res, next) => {

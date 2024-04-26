@@ -67,7 +67,7 @@ exports.size_create_get = asyncHandler(async (req, res, next) => {
 });
 
 exports.size_create_post = [
-    body('tread_width', 'Tread width must be a 3 digit number.')
+    body('tire_width', 'tire width must be a 3 digit number.')
         .trim()
         .isLength({ min: 3, max: 3 })
         .escape(),
@@ -91,7 +91,7 @@ exports.size_create_post = [
         } else {
             //no errors
             const newSize = new TireSize({
-                tread_width: req.body.tread_width,
+                tire_width: req.body.tire_width,
                 aspect_ratio: req.body.aspect_ratio,
                 wheel_dia: req.body.wheel_dia,
             });
@@ -124,7 +124,7 @@ exports.size_update_get = asyncHandler(async (req, res, next) => {
 });
 
 exports.size_update_post = [
-    body('tread_width', 'Tread width must be a 3 digit number.')
+    body('tire_width', 'tire width must be a 3 digit number.')
         .trim()
         .isLength({ min: 3, max: 3 })
         .escape(),
@@ -159,7 +159,7 @@ exports.size_update_post = [
             //data is valid
             try {
                 const updatedSize = await TireSize.findByIdAndUpdate(req.params.id, {
-                    tread_width: req.body.tread_width,
+                    tire_width: req.body.tire_width,
                     aspect_ratio: req.body.aspect_ratio,
                     wheel_dia: req.body.wheel_dia
                 }, { new: true });

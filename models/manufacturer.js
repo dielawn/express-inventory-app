@@ -10,8 +10,5 @@ ManufacturerSchema.virtual('url').get(function () {
     return `/catalog/manufacturer/${this._id}`
 });
 
-ManufacturerSchema.virtual('isMadeInUSA').get(function () {
-    return this.location === 'USA'
-});
 
 module.exports = mongoose.model('Manufacturer', ManufacturerSchema);

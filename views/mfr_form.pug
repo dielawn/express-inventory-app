@@ -7,11 +7,11 @@ block content
     div.form-group
       label(for='name') Manufacturer: 
       input#name.form-control(type='text', placeholder='Company name', name='name', value=(manufacturer ? manufacturer.name : ''))
-  div.form-group
+    div.form-group
       label(for='location') Location: 
       input#location.form-control(type='text', placeholder='Country', name='location', value=(manufacturer ? manufacturer.location : ''))
 
-  button.btn.btn-primary(type='submit') Submit
+    button.btn.btn-primary(type='submit') Submit
 
   if errors && errors.length > 0
     ul

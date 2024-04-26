@@ -76,16 +76,19 @@ exports.tire_instance_create_get = asyncHandler(async (req, res, next) => {
     
 //handle TireInstance create on POST
 exports.tire_instance_create_post = [
-    body('tire', 'Tire must not be empty.')
+    body('tire', 'Tire model must not be empty.')
         .trim()
         .isLength({ min: 1 })
         .escape(),
-    body('dot')
+    body('size', 'A size must be selected.')
+        .isLength({ min: 1 })
+        .escape(),
+    body('dot', 'Must be between 8 and 13 charachters.')
         .trim()
         .isLength({ min: 8, max: 13 })
         .matches(/^[0-9A-Za-z]+$/) //alphanumeric characters
         .escape(),
-    body('date_code')
+    body('date_code', 'Must be 4 digits')
         .trim()
         .isLength({ min: 4, max: 4 })
         .matches(/^\d+$/) //numbers only
@@ -102,12 +105,13 @@ exports.tire_instance_create_post = [
                     title: 'Create Tire Instance',
                     tire_list: allTires,
                     tireInstance: req.body, //pass submitted data back to form
-                    error: errors.array(),
+                    errors: errors.array(),
                 });
         } else {
             //create tire instance obj from val/san data
             const tireInstance = new TireInstance({
                 tire: req.body.tire,
+                size: req.body.size,
                 dot: req.body.dot,
                 date_code: req.body.date_code,
             });
@@ -116,12 +120,12 @@ exports.tire_instance_create_post = [
             await tireInstance.save()
             res.redirect(tireInstance.url);
             } catch (dbError) {
-            const allTires = await Tire.find().sort({ model_name: 1}).exec();
-                res.render('tire_instance_form', {
-                    title: 'Create Tire Instance',
-                    tire_list: allTires,
-                    tireInstance: req.body,
-                    error: `Failed to create tire instance due to database error: ${dbError}`,
+                const allTires = await Tire.find().sort({ model_name: 1}).exec();
+                    res.render('tire_instance_form', {
+                        title: 'Create Tire Instance',
+                        tire_list: allTires,
+                        tireInstance: req.body,
+                        error: `Failed to create tire instance due to database error: ${dbError}`,
             });
            }
         }
@@ -185,16 +189,19 @@ exports.tire_instance_update_get = asyncHandler(async (req, res, next) => {
 })
 //handle TireInstance update on POST
 exports.tire_instance_update_post = [
-    body('tire', 'Tire must not be empty.')
+    body('tire', 'Tire model must not be empty.')
         .trim()
         .isLength({ min: 1 })
         .escape(),
-    body('dot')
+    body('size', 'A size must be selected.')
+        .isLength({ min: 1 })
+        .escape(),
+    body('dot', 'Must be between 8 and 13 charachters.')
         .trim()
         .isLength({ min: 8, max: 13 })
         .matches(/^[0-9A-Za-z]+$/) //alphanumeric characters
         .escape(),
-    body('date_code')
+    body('date_code', 'Must be 4 digits')
         .trim()
         .isLength({ min: 4, max: 4 })
         .matches(/^\d+$/) //numbers only
@@ -220,6 +227,7 @@ exports.tire_instance_update_post = [
            try {
             const updatedTireInstance = await TireInstance.findByIdAndUpdate(req.params.id, {
                 tire: req.body.tire,
+                size: req.body.size,
                 dot: req.body.dot,
                 date_code: req.body.date_code,
             }, { new: true });
