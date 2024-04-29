@@ -147,7 +147,7 @@ exports.tire_instance_delete_get = asyncHandler(async (req, res, next) => {
 
     res.render('tire_instance_delete', {
         title: `Delete Tire Instance: ${tireInstance.dot}`,
-        tireInstance: tireInstance,
+        tire_instance: tireInstance,
     });
     } catch (dbError) {
         const error = encodeURIComponent(`Database GET delete Error: ${dbError}.`)

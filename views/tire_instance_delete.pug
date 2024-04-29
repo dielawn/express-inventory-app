@@ -2,9 +2,8 @@ extends layout
 
 block content
   h1 #{title}
-    p #{tire_instance.tire_name_rating}
-    p #{tire_instance.size.size}
-    p Are you sure you want to delete this tire instance?
+    p #{tire_instance.tire.manufacturer.name} #{tire_instance.tire.model_name} #{tire_instance.size.size}
+  p Are you sure you want to delete this tire instance?
 
   form(method='POST')
     input#id.form-control(type='hidden', name='id', value=tire_instance._id)
