@@ -54,8 +54,11 @@ exports.tire_instance_detail = asyncHandler(async (req, res, next) => {
 exports.tire_instance_create_get = asyncHandler(async (req, res, next) => {
 
    try {
-    const tires = await Tire.find().sort({ model_name: 1}).exec();
-    const sizes = await Size.find().sort({ size: 1 }).exec()
+    const [tires, sizes] = await Promise.all([
+        Tire.find().sort({ model_name: 1}).exec(),
+        Size.find().sort({ size: 1 }).exec()
+    ])
+
     //no tires to create instance of
     if (!tires.length) {
         const error = encodeURIComponent(`No tires available, create tire before creating instance`);
@@ -172,10 +175,15 @@ exports.tire_instance_delete_post = asyncHandler(async (req, res, next) => {
 //display TireInstance update form on GET
 exports.tire_instance_update_get = asyncHandler(async (req, res, next) => {
     //get tire
-    const tireInstance = await TireInstance.findById(req.params.id)
+    const [tires, tireInstance, sizes ] = await Promise.all([
+        Tire.find().sort({ model_name: 1}).exec(),
+        TireInstance.findById(req.params.id)
             .populate({ path: 'tire', populate: { path: 'manufacturer category' }})
             .populate('size')
-            .exec()
+            .exec(),
+        Size.find().sort({ size: 1 }).exec()
+    ])
+   
 
     if (!tireInstance) {
         const error = encodeURIComponent('Tire instance not found.')
@@ -184,7 +192,9 @@ exports.tire_instance_update_get = asyncHandler(async (req, res, next) => {
 
     res.render('tire_instance_form', {
         title: 'Update Tire Instance',
-        tireInstance: tireInstance,
+        tire_instance: tireInstance,
+        tires: tires,
+        sizes: sizes,
     })
 })
 //handle TireInstance update on POST
@@ -196,12 +206,12 @@ exports.tire_instance_update_post = [
     body('size', 'A size must be selected.')
         .isLength({ min: 1 })
         .escape(),
-    body('dot', 'Must be between 8 and 13 charachters.')
+    body('dot', 'DOT Must be between 8 and 13 charachters.')
         .trim()
         .isLength({ min: 8, max: 13 })
         .matches(/^[0-9A-Za-z]+$/) //alphanumeric characters
         .escape(),
-    body('date_code', 'Must be 4 digits')
+    body('date_code', 'Date Code must be 4 digits')
         .trim()
         .isLength({ min: 4, max: 4 })
         .matches(/^\d+$/) //numbers only
@@ -212,15 +222,21 @@ exports.tire_instance_update_post = [
 
         if (!errors.isEmpty()) {
             //yes errors
-            const tireInstance = await TireInstance.findById(req.params.id)
-                .populate({ path: 'tire', populate: { path: 'manufacturer category' }})
-                .populate('size')
-                .exec();
-
+            const [tires, tireInstance, sizes ] = await Promise.all([
+                Tire.find().sort({ model_name: 1}).exec(),
+                TireInstance.findById(req.params.id)
+                    .populate({ path: 'tire', populate: { path: 'manufacturer category' }})
+                    .populate('size')
+                    .exec(),
+                Size.find().sort({ size: 1 }).exec()
+            ])
+            
                 res.render('tire_instance_form', {
                     title: 'Update Tire Instance',
-                    tireInstance: tireInstance,
-                    error: errors.array(),
+                    tire_instance: tireInstance,
+                    tires: tires,
+                    sizes: sizes,
+                    errors: errors.array(),
                 });
         } else {
             //data is valid
@@ -231,6 +247,7 @@ exports.tire_instance_update_post = [
                 dot: req.body.dot,
                 date_code: req.body.date_code,
             }, { new: true });
+            console.log('No errors')
                 res.redirect(updatedTireInstance.url);
                 
            } catch (dbError) {            
