@@ -136,7 +136,7 @@ exports.category_update_get = asyncHandler(async (req, res, next) => {
         }
 
         res.render('category_form', {
-            Title: `Update Category: ${category.tire_class}`,
+            title: `Update Category: ${category.tire_class}`,
             category: category,
         })
     } catch (dbError) {
@@ -157,9 +157,9 @@ exports.category_update_post = [
 
         asyncHandler(async (req, res, next) => {
             const errors = validationResult(req);
-    
+         
             if (!errors.isEmpty()) {
-                try {
+           
                     //errors display form
                     const category = await Category.findById(req.params.id);
                     res.render('category_form', {
@@ -167,12 +167,8 @@ exports.category_update_post = [
                         category: {...category.toObject(), ...req.body},  //pass the submitted data back to the form
                         error: errors.array(),
                     });
-                } catch (dbError) {
-                    const error = encodeURIComponent(`Database error during data retrieval: ${dbError.message}`);
-                    return res.redirect(`/catalog/categories?error=${error}`);
-                } 
-            } else {
-                try {
+                } else {        
+                    try {
                     const updatedCategory = await Category.findByIdAndUpdate(req.params.id, {
                         tire_class: req.body.tire_class,
                         season: req.body.season,
@@ -180,10 +176,9 @@ exports.category_update_post = [
                     }, { new: true });
 
                     res.redirect(updatedCategory.url)
-
                 } catch (dbError) {
-                    const error = encodeURIComponent(`Database POST Error: ${dbError.message}.`)
-                    return res.redirect(`/catalog/categories?error=${error}`);
+                    const error = encodeURIComponent(`Database POST update error: ${dbError.message}`)
+                    res.redirect(`/catalog/categories?error=${error}`);
                 }
             } 
         }),

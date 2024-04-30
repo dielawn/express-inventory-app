@@ -7,7 +7,6 @@ const CategorySchema = new Schema({
     description: {type: String, required: false},
 });
 
-CategorySchema.virtual('')
 
 CategorySchema.virtual('url').get(function () {
     return `/catalog/category/${this._id}`

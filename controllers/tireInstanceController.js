@@ -52,30 +52,31 @@ exports.tire_instance_detail = asyncHandler(async (req, res, next) => {
 
 //display create new TireInstance form on GET
 exports.tire_instance_create_get = asyncHandler(async (req, res, next) => {
-
-   try {
-    const [tires, sizes] = await Promise.all([
-        Tire.find().sort({ model_name: 1}).exec(),
-        Size.find().sort({ size: 1 }).exec()
-    ])
-
-    //no tires to create instance of
-    if (!tires.length) {
-        const error = encodeURIComponent(`No tires available, create tire before creating instance`);
-        res.redirect(`/catalog/tires?error=${error}`);
-    }  
-    //display form
-    res.render('tire_instance_form', {
-        title: 'Create Tire Instance',
-        tires: tires,
-        sizes: sizes,
-    });
-    //database error redirect to tire list
-   } catch (dbError) {
-        const error = encodeURIComponent(`Database GET error: ${dbError.message}`);
-        res.redirect(`/catalog/tireinstances?error=${error}`);
-   }
-});
+    try {
+     const [tires, sizes ] = await Promise.all([
+         Tire.find().sort({ model_name: 1}).exec(),
+         Size.find().sort({ size: 1 }).exec()
+     ]);
+ 
+     // No tires to create instance of
+     if (!tires.length) {
+         const error = encodeURIComponent(`No tires available, create tire before creating instance`);
+         res.redirect(`/catalog/tires?error=${error}`);
+     }
+ 
+     // Display form
+    
+     res.render('tire_instance_form', {
+         title: 'Create Tire Instance',
+         tires: tires,
+         sizes: sizes,
+     });
+    } catch (dbError) {
+         const error = encodeURIComponent(`Database GET error: ${dbError.message}`);
+         res.redirect(`/catalog/tireinstances?error=${error}`);
+    }
+ });
+ 
     
 //handle TireInstance create on POST
 exports.tire_instance_create_post = [

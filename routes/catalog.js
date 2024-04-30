@@ -95,7 +95,7 @@ router.get('/categories', category_controller.category_list);
 router.get('/category/:id', category_controller.category_detail);
 
 //GET update
-router.get('/cateory/:id/update', category_controller.category_update_get);
+router.get('/category/:id/update', category_controller.category_update_get);
 //POST update
 router.post('/category/:id/update', category_controller.category_update_post);
 

@@ -17,26 +17,28 @@ block content
               option(value=tire._id)= tire.model_name
         else
           option No tires available
+
     div.form-group
       label(for='size') Sizes:
       select#size.form-control(name='size' required)
         option(value='') --Please select a tire size--
         if sizes
           each size in sizes
-            - const selected = tire_instance.size._id.toString() === size._id.toString()
+            - const selected = tire_instance && tire_instance.size && tire_instance.size._id.toString() === size._id.toString()
             if selected
               option(value=size._id selected)= size.size
             else
               option(value=size._id)= size.size
         else
           option No sizes available
+
     div.form-group
       label(for='dot') DOT:
-      input#dot.form-control(type='text', placeholder='DOT', name='dot', required, value=(tire_instance && tire_instance.dot ? tire_instance.dot : ''))
+      input#dot.form-control(type='text', placeholder='DOT', name='dot', required value=(tire_instance && tire_instance.dot ? tire_instance.dot : ''))
 
     div.form-group
       label(for='date_code') Date Code:
-      input#date_code.form-control(type='text', placeholder='Date code', name='date_code' required value=(tire_instance && tire_instance.date_code ? tire_instance.date_code : ''))
+      input#date_code.form-control(type='text', placeholder='Date code', name='date_code', required value=(tire_instance && tire_instance.date_code ? tire_instance.date_code : ''))
 
     button.btn.btn-primary(type='submit') Submit
 

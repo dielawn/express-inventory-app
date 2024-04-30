@@ -155,7 +155,7 @@ exports.mfr_update_get = asyncHandler(async (req, res, next) => {
         }
         res.render('mfr_form', {
             title: 'Update Manufacturer',
-            mfr: mfr,
+            manufacturer: mfr,
         });
     } catch (dbError) {
         const error = encodeURIComponent(`Database GET update Error: ${dbError.message}.`)
